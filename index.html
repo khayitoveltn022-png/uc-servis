@@ -1,31 +1,50 @@
+
 <!DOCTYPE html>
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>UC SERVIS</title>
+
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   font-family:Arial,sans-serif;
-  background:#0b0d12;
-  color:#fff;
+  background:#080b10;
+  color:white;
 }
-header{
-  padding:20px;
-  text-align:center;
-  background:#11151d;
-  border-bottom:1px solid #242a35;
-}
-header h1{margin:0;font-size:28px}
-header p{color:#aaa;margin:7px 0 0}
 
-.container{padding:18px;max-width:700px;margin:auto}
+header{
+  padding:22px 16px;
+  text-align:center;
+  background:#111722;
+  border-bottom:1px solid #29313d;
+}
+
+header h1{
+  margin:0;
+  font-size:30px;
+}
+
+header p{
+  margin:8px 0 0;
+  color:#aeb5c0;
+}
+
+.container{
+  width:100%;
+  max-width:700px;
+  margin:auto;
+  padding:18px;
+}
 
 .section-title{
+  margin:24px 0 12px;
   font-size:22px;
-  margin:25px 0 12px;
 }
 
 .products{
@@ -35,44 +54,322 @@ header p{color:#aaa;margin:7px 0 0}
 }
 
 .card{
-  background:#151a23;
-  border:1px solid #29313e;
-  border-radius:15px;
-  padding:16px;
+  background:#141a24;
+  border:1px solid #293342;
+  border-radius:16px;
+  padding:16px 10px;
   text-align:center;
 }
 
-.icon{font-size:42px;margin-bottom:8px}
-.card h3{margin:5px 0}
-.price{color:#ffd54a;font-weight:bold;margin:8px 0}
+.icon{
+  font-size:42px;
+  margin-bottom:8px;
+}
+
+.card h3{
+  margin:6px 0;
+  font-size:17px;
+}
+
+.price{
+  color:#ffd447;
+  font-weight:bold;
+  margin:9px 0 12px;
+}
 
 button{
   border:0;
   border-radius:10px;
   padding:11px 15px;
-  background:#f5b400;
+  background:#f5b900;
   color:#111;
   font-weight:bold;
   cursor:pointer;
 }
-button:hover{opacity:.9}
+
+button:active{
+  transform:scale(.97);
+}
 
 .form{
-  background:#151a23;
+  background:#141a24;
+  border:1px solid #293342;
+  border-radius:16px;
   padding:18px;
-  border-radius:15px;
-  margin-top:15px;
+  margin-top:12px;
+}
+
+label{
+  display:block;
+  margin-top:10px;
+  margin-bottom:5px;
+  color:#cbd1da;
 }
 
 input,select{
   width:100%;
   padding:13px;
-  margin:7px 0 13px;
-  border-radius:9px;
-  border:1px solid #303846;
-  background:#0d1118;
-  color:#fff;
+  border-radius:10px;
+  border:1px solid #303a49;
+  background:#0c1118;
+  color:white;
+  outline:none;
+}
+
+input:focus,select:focus{
+  border-color:#f5b900;
 }
 
 .total{
-  font-size:20
+  margin:18px 0;
+  font-size:21px;
+  font-weight:bold;
+  color:#ffd447;
+}
+
+.order-button{
+  width:100%;
+  font-size:16px;
+  padding:14px;
+}
+
+.message{
+  display:none;
+  margin-top:15px;
+  padding:15px;
+  border-radius:12px;
+  background:#123b25;
+  border:1px solid #21663c;
+  line-height:1.7;
+}
+
+.info{
+  margin-top:20px;
+  padding:15px;
+  border-radius:12px;
+  background:#101722;
+  color:#aeb5c0;
+  font-size:14px;
+  line-height:1.6;
+}
+
+footer{
+  text-align:center;
+  padding:30px 15px;
+  color:#707986;
+}
+
+@media(max-width:420px){
+  .products{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .card{
+    padding:13px 7px;
+  }
+
+  .icon{
+    font-size:36px;
+  }
+
+  header h1{
+    font-size:26px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>🎮 UC SERVIS</h1>
+  <p>PUBG Mobile xizmatlari</p>
+</header>
+
+<main class="container">
+
+<h2 class="section-title">🪙 UC Paketlari</h2>
+
+<div class="products">
+
+  <div class="card">
+    <div class="icon">🪙</div>
+    <h3>60 UC</h3>
+    <div class="price">12 000 so'm</div>
+    <button onclick="selectProduct('60 UC',12000)">Tanlash</button>
+  </div>
+
+  <div class="card">
+    <div class="icon">🪙</div>
+    <h3>325 UC</h3>
+    <div class="price">60 000 so'm</div>
+    <button onclick="selectProduct('325 UC',60000)">Tanlash</button>
+  </div>
+
+  <div class="card">
+    <div class="icon">🪙</div>
+    <h3>660 UC</h3>
+    <div class="price">120 000 so'm</div>
+    <button onclick="selectProduct('660 UC',120000)">Tanlash</button>
+  </div>
+
+  <div class="card">
+    <div class="icon">🪙</div>
+    <h3>1800 UC</h3>
+    <div class="price">300 000 so'm</div>
+    <button onclick="selectProduct('1800 UC',300000)">Tanlash</button>
+  </div>
+
+</div>
+
+<h2 class="section-title">🎁 Xizmatlar</h2>
+
+<div class="products">
+
+  <div class="card">
+    <div class="icon">🎁</div>
+    <h3>Emote</h3>
+    <div class="price">Tanlang</div>
+    <button onclick="selectProduct('Emote',0)">Tanlash</button>
+  </div>
+
+  <div class="card">
+    <div class="icon">👕</div>
+    <h3>Kiyim</h3>
+    <div class="price">Tanlang</div>
+    <button onclick="selectProduct('Kiyim',0)">Tanlash</button>
+  </div>
+
+  <div class="card">
+    <div class="icon">💎</div>
+    <h3>Qizil kristall</h3>
+    <div class="price">Tanlang</div>
+    <button onclick="selectProduct('Qizil kristall',0)">Tanlash</button>
+  </div>
+
+  <div class="card">
+    <div class="icon">🚗</div>
+    <h3>Super Car</h3>
+    <div class="price">Tanlang</div>
+    <button onclick="selectProduct('Super Car',0)">Tanlash</button>
+  </div>
+
+</div>
+
+<h2 class="section-title">🛒 Buyurtma berish</h2>
+
+<div class="form">
+
+  <label>Mahsulot</label>
+  <input id="product" readonly placeholder="Avval mahsulot tanlang">
+
+  <label>PUBG ID</label>
+  <input id="pubgid" type="text" placeholder="PUBG ID raqamingiz">
+
+  <label>Telefon raqam</label>
+  <input id="phone" type="tel" placeholder="+998 XX XXX XX XX">
+
+  <label>To'lov usuli</label>
+  <select id="payment">
+    <option value="Payme">Payme</option>
+    <option value="Click">Click</option>
+    <option value="Uzcard">Uzcard</option>
+  </select>
+
+  <div class="total">
+    Jami: <span id="total">0</span> so'm
+  </div>
+
+  <button class="order-button" onclick="placeOrder()">
+    🛒 Buyurtma berish
+  </button>
+
+  <div id="message" class="message"></div>
+
+</div>
+
+<div class="info">
+  ℹ️ Hozirgi versiyada to'lov avtomatik olinmaydi.
+  To'lov tizimi keyinchalik rasmiy tarzda ulanadi.
+</div>
+
+</main>
+
+<footer>
+  UC SERVIS © 2026
+</footer>
+
+<script>
+
+let selectedProduct = "";
+let selectedPrice = 0;
+
+function selectProduct(name, price){
+
+  selectedProduct = name;
+  selectedPrice = price;
+
+  document.getElementById("product").value = name;
+
+  document.getElementById("total").textContent =
+    price.toLocaleString("uz-UZ");
+
+  document.getElementById("product").scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+}
+
+function placeOrder(){
+
+  const pubgid =
+    document.getElementById("pubgid").value.trim();
+
+  const phone =
+    document.getElementById("phone").value.trim();
+
+  const payment =
+    document.getElementById("payment").value;
+
+  if(selectedProduct === ""){
+    alert("Avval mahsulot tanlang!");
+    return;
+  }
+
+  if(pubgid === ""){
+    alert("PUBG ID ni kiriting!");
+    return;
+  }
+
+  if(phone === ""){
+    alert("Telefon raqamingizni kiriting!");
+    return;
+  }
+
+  const orderId =
+    "UC" + Date.now().toString().slice(-8);
+
+  const message =
+    document.getElementById("message");
+
+  message.style.display = "block";
+
+  message.innerHTML =
+    "✅ <b>Buyurtma qabul qilindi!</b><br><br>" +
+    "Buyurtma raqami: <b>" + orderId + "</b><br>" +
+    "Mahsulot: " + selectedProduct + "<br>" +
+    "PUBG ID: " + pubgid + "<br>" +
+    "Telefon: " + phone + "<br>" +
+    "To'lov: " + payment + "<br>" +
+    "Holat: <b>Kutilmoqda</b>";
+
+  message.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+}
+
+</script>
+
+</body>
+</html>
