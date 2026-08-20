@@ -729,35 +729,52 @@ function loadCatalog(){
 loadCatalog();
   function openCatalog(type){
 
-  document.getElementById("shop").style.display="none";
-  document.getElementById("history").style.display="none";
-  document.getElementById("admin").style.display="none";
-  document.getElementById("catalog").style.display="block";
+  document.getElementById("shop").style.display = "none";
+  document.getElementById("history").style.display = "none";
+  document.getElementById("admin").style.display = "none";
 
-  if(type==="emotes"){
-    document.getElementById("emoteList").scrollIntoView({
-      behavior:"smooth"
-    });
-  }
+  const catalog = document.getElementById("catalog");
 
-  if(type==="clothes"){
-    document.getElementById("clothesList").scrollIntoView({
-      behavior:"smooth"
-    });
+  if(!catalog){
+    alert("Katalog topilmadi");
+    return;
   }
 
-  if(type==="crystals"){
-    document.getElementById("crystalList").scrollIntoView({
-      behavior:"smooth"
-    });
+  catalog.style.display = "block";
+
+  if(type === "emotes"){
+    document.getElementById("emoteList").style.display = "grid";
+    document.getElementById("clothesList").style.display = "none";
+    document.getElementById("crystalList").style.display = "none";
+    document.getElementById("carList").style.display = "none";
   }
 
-  if(type==="cars"){
-    document.getElementById("carList").scrollIntoView({
-      behavior:"smooth"
-    });
+  if(type === "clothes"){
+    document.getElementById("emoteList").style.display = "none";
+    document.getElementById("clothesList").style.display = "grid";
+    document.getElementById("crystalList").style.display = "none";
+    document.getElementById("carList").style.display = "none";
   }
+
+  if(type === "crystals"){
+    document.getElementById("emoteList").style.display = "none";
+    document.getElementById("clothesList").style.display = "none";
+    document.getElementById("crystalList").style.display = "grid";
+    document.getElementById("carList").style.display = "none";
   }
+
+  if(type === "cars"){
+    document.getElementById("emoteList").style.display = "none";
+    document.getElementById("clothesList").style.display = "none";
+    document.getElementById("crystalList").style.display = "none";
+    document.getElementById("carList").style.display = "grid";
+  }
+
+  catalog.scrollIntoView({
+    behavior:"smooth",
+    block:"start"
+  });
+                       }
 </script>
 
 </body>
