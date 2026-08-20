@@ -774,7 +774,41 @@ loadCatalog();
     behavior:"smooth",
     block:"start"
   });
-                       }
+     function openCatalog(type) {
+  const catalog = document.getElementById("catalog");
+
+  if (!catalog) {
+    alert("Katalog topilmadi");
+    return;
+  }
+
+  catalog.style.display = "block";
+
+  document.getElementById("emoteList").style.display = "none";
+  document.getElementById("clothesList").style.display = "none";
+  document.getElementById("crystalList").style.display = "none";
+  document.getElementById("carList").style.display = "none";
+
+  if (type === "emotes") {
+    document.getElementById("emoteList").style.display = "grid";
+  }
+
+  if (type === "clothes") {
+    document.getElementById("clothesList").style.display = "grid";
+  }
+
+  if (type === "crystals") {
+    document.getElementById("crystalList").style.display = "grid";
+  }
+
+  if (type === "cars") {
+    document.getElementById("carList").style.display = "grid";
+  }
+
+  catalog.scrollIntoView({
+    behavior: "smooth"
+  });
+  }                  }
 </script>
 
 </body>
