@@ -632,7 +632,105 @@ loadHistory();
 }
 
 loadHistory();
+ // ===== UC SERVIS CATALOG =====
 
+const catalogData = {
+
+  emotes: Array.from({length:20}, (_,i) => ({
+    name: "Emote " + (i+1),
+    price: 0
+  })),
+
+  clothes: Array.from({length:120}, (_,i) => ({
+    name: "Kiyim " + (i+1),
+    price: 0
+  })),
+
+  cars: Array.from({length:5}, (_,i) => ({
+    name: "Super Car " + (i+1),
+    price: 0
+  })),
+
+  crystals: [
+    {name:"50 kristall",price:0},
+    {name:"100 kristall",price:0},
+    {name:"150 kristall",price:0},
+    {name:"200 kristall",price:0},
+    {name:"250 kristall",price:0},
+    {name:"300 kristall",price:0},
+    {name:"400 kristall",price:0},
+    {name:"500 kristall",price:0},
+    {name:"600 kristall",price:0},
+    {name:"700 kristall",price:0},
+    {name:"800 kristall",price:0},
+    {name:"900 kristall",price:0},
+    {name:"1000 kristall",price:0}
+  ]
+
+};
+
+function renderCatalog(list, elementId, icon){
+
+  const box = document.getElementById(elementId);
+
+  if(!box) return;
+
+  box.innerHTML = "";
+
+  list.forEach((item,index)=>{
+
+    const card = document.createElement("div");
+
+    card.className = "card";
+
+    card.innerHTML = `
+      <div class="icon">${icon}</div>
+      <h3>${item.name}</h3>
+      <div class="price">
+        ${item.price > 0
+          ? item.price.toLocaleString("uz-UZ") + " so'm"
+          : "Narxni kiriting"}
+      </div>
+      <button onclick="selectProduct('${item.name}',${item.price})">
+        Tanlash
+      </button>
+    `;
+
+    box.appendChild(card);
+
+  });
+
+}
+
+function loadCatalog(){
+
+  renderCatalog(
+    catalogData.emotes,
+    "emoteList",
+    "🎭"
+  );
+
+  renderCatalog(
+    catalogData.clothes,
+    "clothesList",
+    "👕"
+  );
+
+  renderCatalog(
+    catalogData.crystals,
+    "crystalList",
+    "💎"
+  );
+
+  renderCatalog(
+    catalogData.cars,
+    "carList",
+    "🚗"
+  );
+
+}
+
+loadCatalog();
 </script>
 
 </body>
