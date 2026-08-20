@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="uz">
 <head>
@@ -7,174 +6,176 @@
 <title>UC SERVIS</title>
 
 <style>
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#080b10;
-  color:white;
+margin:0;
+font-family:Arial,sans-serif;
+background:#080b10;
+color:#fff;
 }
 
 header{
-  padding:22px 16px;
-  text-align:center;
-  background:#111722;
-  border-bottom:1px solid #29313d;
+background:#111722;
+padding:20px;
+text-align:center;
+border-bottom:1px solid #293342;
 }
 
 header h1{
-  margin:0;
-  font-size:30px;
+margin:0;
+font-size:29px;
 }
 
 header p{
-  margin:8px 0 0;
-  color:#aeb5c0;
+color:#9da6b3;
+margin:7px 0 0;
 }
 
 .container{
-  width:100%;
-  max-width:700px;
-  margin:auto;
-  padding:18px;
+max-width:750px;
+margin:auto;
+padding:16px;
 }
 
 .section-title{
-  margin:24px 0 12px;
-  font-size:22px;
+font-size:21px;
+margin:24px 0 12px;
 }
 
 .products{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:12px;
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:11px;
 }
 
 .card{
-  background:#141a24;
-  border:1px solid #293342;
-  border-radius:16px;
-  padding:16px 10px;
-  text-align:center;
+background:#141a24;
+border:1px solid #293342;
+border-radius:15px;
+padding:14px 8px;
+text-align:center;
 }
 
 .icon{
-  font-size:42px;
-  margin-bottom:8px;
+font-size:35px;
 }
 
 .card h3{
-  margin:6px 0;
-  font-size:17px;
+margin:7px 0;
+font-size:16px;
 }
 
 .price{
-  color:#ffd447;
-  font-weight:bold;
-  margin:9px 0 12px;
+color:#ffd447;
+font-weight:bold;
+margin:8px 0;
 }
 
 button{
-  border:0;
-  border-radius:10px;
-  padding:11px 15px;
-  background:#f5b900;
-  color:#111;
-  font-weight:bold;
-  cursor:pointer;
+border:0;
+border-radius:10px;
+padding:11px 14px;
+background:#f5b900;
+color:#111;
+font-weight:bold;
 }
 
 button:active{
-  transform:scale(.97);
+transform:scale(.97);
 }
 
-.form{
-  background:#141a24;
-  border:1px solid #293342;
-  border-radius:16px;
-  padding:18px;
-  margin-top:12px;
+.form,
+.panel{
+background:#141a24;
+border:1px solid #293342;
+border-radius:15px;
+padding:17px;
+margin-top:12px;
 }
 
 label{
-  display:block;
-  margin-top:10px;
-  margin-bottom:5px;
-  color:#cbd1da;
+display:block;
+margin:11px 0 5px;
+color:#c5ccd5;
 }
 
 input,select{
-  width:100%;
-  padding:13px;
-  border-radius:10px;
-  border:1px solid #303a49;
-  background:#0c1118;
-  color:white;
-  outline:none;
-}
-
-input:focus,select:focus{
-  border-color:#f5b900;
+width:100%;
+padding:13px;
+border-radius:9px;
+border:1px solid #303a49;
+background:#0c1118;
+color:white;
 }
 
 .total{
-  margin:18px 0;
-  font-size:21px;
-  font-weight:bold;
-  color:#ffd447;
+font-size:20px;
+color:#ffd447;
+font-weight:bold;
+margin:17px 0;
 }
 
-.order-button{
-  width:100%;
-  font-size:16px;
-  padding:14px;
+.order-btn{
+width:100%;
+font-size:16px;
+padding:14px;
 }
 
 .message{
-  display:none;
-  margin-top:15px;
-  padding:15px;
-  border-radius:12px;
-  background:#123b25;
-  border:1px solid #21663c;
-  line-height:1.7;
+display:none;
+margin-top:14px;
+padding:14px;
+border-radius:10px;
+background:#123a24;
+line-height:1.7;
 }
 
-.info{
-  margin-top:20px;
-  padding:15px;
-  border-radius:12px;
-  background:#101722;
-  color:#aeb5c0;
-  font-size:14px;
-  line-height:1.6;
+.nav{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
+margin-bottom:20px;
+}
+
+.nav button{
+background:#202936;
+color:white;
+}
+
+.history-item{
+background:#0d121a;
+border:1px solid #293342;
+border-radius:10px;
+padding:13px;
+margin:8px 0;
+line-height:1.6;
+}
+
+.status{
+color:#ffd447;
+font-weight:bold;
+}
+
+.admin{
+display:none;
+}
+
+.small{
+font-size:13px;
+color:#929aa6;
 }
 
 footer{
-  text-align:center;
-  padding:30px 15px;
-  color:#707986;
+text-align:center;
+padding:30px;
+color:#68717e;
 }
 
 @media(max-width:420px){
-  .products{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .card{
-    padding:13px 7px;
-  }
-
-  .icon{
-    font-size:36px;
-  }
-
-  header h1{
-    font-size:26px;
-  }
+.products{
+grid-template-columns:repeat(2,1fr);
+}
 }
 </style>
 </head>
@@ -182,43 +183,67 @@ footer{
 <body>
 
 <header>
-  <h1>🎮 UC SERVIS</h1>
-  <p>PUBG Mobile xizmatlari</p>
+<h1>🎮 UC SERVIS</h1>
+<p>PUBG Mobile xizmatlari</p>
 </header>
 
 <main class="container">
+
+<div class="nav">
+<button onclick="showSection('shop')">🛒 Do'kon</button>
+<button onclick="showSection('history')">📋 Buyurtmalar</button>
+<button onclick="adminLogin()">🔐 Admin</button>
+</div>
+
+<!-- SHOP -->
+
+<section id="shop">
 
 <h2 class="section-title">🪙 UC Paketlari</h2>
 
 <div class="products">
 
-  <div class="card">
-    <div class="icon">🪙</div>
-    <h3>60 UC</h3>
-    <div class="price">12 000 so'm</div>
-    <button onclick="selectProduct('60 UC',12000)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">🪙</div><h3>60 UC</h3><div class="price">12 000 so'm</div><button onclick="selectUC(60,12000)">Tanlash</button></div>
 
-  <div class="card">
-    <div class="icon">🪙</div>
-    <h3>325 UC</h3>
-    <div class="price">60 000 so'm</div>
-    <button onclick="selectProduct('325 UC',60000)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">🪙</div><h3>120 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(120,0)">Tanlash</button></div>
 
-  <div class="card">
-    <div class="icon">🪙</div>
-    <h3>660 UC</h3>
-    <div class="price">120 000 so'm</div>
-    <button onclick="selectProduct('660 UC',120000)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">🪙</div><h3>180 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(180,0)">Tanlash</button></div>
 
-  <div class="card">
-    <div class="icon">🪙</div>
-    <h3>1800 UC</h3>
-    <div class="price">300 000 so'm</div>
-    <button onclick="selectProduct('1800 UC',300000)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">🪙</div><h3>325 UC</h3><div class="price">60 000 so'm</div><button onclick="selectUC(325,60000)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>385 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(385,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>660 UC</h3><div class="price">120 000 so'm</div><button onclick="selectUC(660,120000)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>720 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(720,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>900 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(900,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>1200 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(1200,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>1500 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(1500,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>1800 UC</h3><div class="price">300 000 so'm</div><button onclick="selectUC(1800,300000)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>2400 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(2400,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>3000 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(3000,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>3600 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(3600,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>4200 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(4200,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>4800 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(4800,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>5400 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(5400,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>6000 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(6000,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>7200 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(7200,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>8100 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(8100,0)">Tanlash</button></div>
+
+<div class="card"><div class="icon">🪙</div><h3>9000 UC</h3><div class="price">Narxni kiriting</div><button onclick="selectUC(9000,0)">Tanlash</button></div>
 
 </div>
 
@@ -226,148 +251,351 @@ footer{
 
 <div class="products">
 
-  <div class="card">
-    <div class="icon">🎁</div>
-    <h3>Emote</h3>
-    <div class="price">Tanlang</div>
-    <button onclick="selectProduct('Emote',0)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">🎭</div><h3>Emote</h3><div class="price">Tanlang</div><button onclick="selectProduct('Emote',0)">Tanlash</button></div>
 
-  <div class="card">
-    <div class="icon">👕</div>
-    <h3>Kiyim</h3>
-    <div class="price">Tanlang</div>
-    <button onclick="selectProduct('Kiyim',0)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">👕</div><h3>Kiyim</h3><div class="price">Tanlang</div><button onclick="selectProduct('Kiyim',0)">Tanlash</button></div>
 
-  <div class="card">
-    <div class="icon">💎</div>
-    <h3>Qizil kristall</h3>
-    <div class="price">Tanlang</div>
-    <button onclick="selectProduct('Qizil kristall',0)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">💎</div><h3>Qizil kristall</h3><div class="price">Tanlang</div><button onclick="selectProduct('Qizil kristall',0)">Tanlash</button></div>
 
-  <div class="card">
-    <div class="icon">🚗</div>
-    <h3>Super Car</h3>
-    <div class="price">Tanlang</div>
-    <button onclick="selectProduct('Super Car',0)">Tanlash</button>
-  </div>
+<div class="card"><div class="icon">🚗</div><h3>Super Car</h3><div class="price">Tanlang</div><button onclick="selectProduct('Super Car',0)">Tanlash</button></div>
 
 </div>
 
-<h2 class="section-title">🛒 Buyurtma berish</h2>
+<h2 class="section-title">🛒 Buyurtma</h2>
 
 <div class="form">
 
-  <label>Mahsulot</label>
-  <input id="product" readonly placeholder="Avval mahsulot tanlang">
+<label>Mahsulot</label>
+<input id="product" readonly placeholder="Mahsulot tanlang">
 
-  <label>PUBG ID</label>
-  <input id="pubgid" type="text" placeholder="PUBG ID raqamingiz">
+<label>Miqdor</label>
+<input id="quantity" type="number" min="1" value="1" onchange="calculateTotal()">
 
-  <label>Telefon raqam</label>
-  <input id="phone" type="tel" placeholder="+998 XX XXX XX XX">
+<label>PUBG ID</label>
+<input id="pubgid" placeholder="PUBG ID">
 
-  <label>To'lov usuli</label>
-  <select id="payment">
-    <option value="Payme">Payme</option>
-    <option value="Click">Click</option>
-    <option value="Uzcard">Uzcard</option>
-  </select>
+<label>Telefon raqam</label>
+<input id="phone" placeholder="+998 XX XXX XX XX">
 
-  <div class="total">
-    Jami: <span id="total">0</span> so'm
-  </div>
+<label>To'lov usuli</label>
+<select id="payment">
+<option>Payme</option>
+<option>Click</option>
+<option>Uzcard</option>
+</select>
 
-  <button class="order-button" onclick="placeOrder()">
-    🛒 Buyurtma berish
-  </button>
+<div class="total">
+Jami: <span id="total">0</span> so'm
+</div>
 
-  <div id="message" class="message"></div>
+<button class="order-btn" onclick="createOrder()">🛒 Buyurtma berish</button>
+
+<div id="message" class="message"></div>
 
 </div>
 
-<div class="info">
-  ℹ️ Hozirgi versiyada to'lov avtomatik olinmaydi.
-  To'lov tizimi keyinchalik rasmiy tarzda ulanadi.
+</section>
+
+<!-- HISTORY -->
+
+<section id="history" style="display:none">
+
+<h2 class="section-title">📋 Buyurtmalar tarixi</h2>
+
+<div id="historyList">
+<p class="small">Hozircha buyurtmalar yo'q.</p>
 </div>
+
+</section>
+
+<!-- ADMIN -->
+
+<section id="admin" class="admin">
+
+<h2 class="section-title">👨‍💼 Admin panel</h2>
+
+<div class="panel">
+
+<p>Jami buyurtmalar: <b id="adminTotal">0</b></p>
+<p>Kutilayotgan: <b id="adminPending">0</b></p>
+<p>Tugallangan: <b id="adminCompleted">0</b></p>
+
+<div id="adminOrders"></div>
+
+</div>
+
+</section>
 
 </main>
 
 <footer>
-  UC SERVIS © 2026
+UC SERVIS © 2026
 </footer>
 
 <script>
 
-let selectedProduct = "";
-let selectedPrice = 0;
+let selectedProduct="";
+let selectedPrice=0;
 
-function selectProduct(name, price){
+function selectUC(amount,price){
 
-  selectedProduct = name;
-  selectedPrice = price;
+selectedProduct=amount+" UC";
+selectedPrice=price;
 
-  document.getElementById("product").value = name;
+document.getElementById("product").value=selectedProduct;
 
-  document.getElementById("total").textContent =
-    price.toLocaleString("uz-UZ");
+calculateTotal();
 
-  document.getElementById("product").scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
+document.getElementById("product").scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
 }
 
-function placeOrder(){
+function selectProduct(name,price){
 
-  const pubgid =
-    document.getElementById("pubgid").value.trim();
+selectedProduct=name;
+selectedPrice=price;
 
-  const phone =
-    document.getElementById("phone").value.trim();
+document.getElementById("product").value=name;
 
-  const payment =
-    document.getElementById("payment").value;
+calculateTotal();
 
-  if(selectedProduct === ""){
-    alert("Avval mahsulot tanlang!");
-    return;
-  }
+document.getElementById("product").scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
 
-  if(pubgid === ""){
-    alert("PUBG ID ni kiriting!");
-    return;
-  }
-
-  if(phone === ""){
-    alert("Telefon raqamingizni kiriting!");
-    return;
-  }
-
-  const orderId =
-    "UC" + Date.now().toString().slice(-8);
-
-  const message =
-    document.getElementById("message");
-
-  message.style.display = "block";
-
-  message.innerHTML =
-    "✅ <b>Buyurtma qabul qilindi!</b><br><br>" +
-    "Buyurtma raqami: <b>" + orderId + "</b><br>" +
-    "Mahsulot: " + selectedProduct + "<br>" +
-    "PUBG ID: " + pubgid + "<br>" +
-    "Telefon: " + phone + "<br>" +
-    "To'lov: " + payment + "<br>" +
-    "Holat: <b>Kutilmoqda</b>";
-
-  message.scrollIntoView({
-    behavior:"smooth",
-    block:"center"
-  });
 }
+
+function calculateTotal(){
+
+let quantity=parseInt(
+document.getElementById("quantity").value
+)||1;
+
+let total=selectedPrice*quantity;
+
+document.getElementById("total").textContent=
+total.toLocaleString("uz-UZ");
+
+}
+
+function createOrder(){
+
+if(!selectedProduct){
+alert("Avval mahsulot tanlang!");
+return;
+}
+
+let pubgid=document.getElementById("pubgid").value.trim();
+let phone=document.getElementById("phone").value.trim();
+let payment=document.getElementById("payment").value;
+let quantity=parseInt(document.getElementById("quantity").value)||1;
+
+if(!pubgid){
+alert("PUBG ID ni kiriting!");
+return;
+}
+
+if(!phone){
+alert("Telefon raqamingizni kiriting!");
+return;
+}
+
+let total=selectedPrice*quantity;
+
+let order={
+id:"UC"+Date.now().toString().slice(-8),
+product:selectedProduct,
+quantity:quantity,
+pubgid:pubgid,
+phone:phone,
+payment:payment,
+total:total,
+status:"Kutilmoqda",
+date:new Date().toLocaleString("uz-UZ")
+};
+
+let orders=JSON.parse(
+localStorage.getItem("uc_orders")||"[]"
+);
+
+orders.push(order);
+
+localStorage.setItem(
+"uc_orders",
+JSON.stringify(orders)
+);
+
+document.getElementById("message").style.display="block";
+
+document.getElementById("message").innerHTML=
+"✅ <b>Buyurtma qabul qilindi!</b><br><br>"+
+"Buyurtma: <b>"+order.id+"</b><br>"+
+"Mahsulot: "+order.product+"<br>"+
+"Miqdor: "+order.quantity+"<br>"+
+"Jami: "+total.toLocaleString("uz-UZ")+" so'm<br>"+
+"Holat: <b>Kutilmoqda</b>";
+
+loadHistory();
+
+}
+
+function loadHistory(){
+
+let orders=JSON.parse(
+localStorage.getItem("uc_orders")||"[]"
+);
+
+let list=document.getElementById("historyList");
+
+if(orders.length===0){
+list.innerHTML="<p class='small'>Hozircha buyurtmalar yo'q.</p>";
+return;
+}
+
+list.innerHTML="";
+
+orders.slice().reverse().forEach(order=>{
+
+let div=document.createElement("div");
+
+div.className="history-item";
+
+div.innerHTML=
+"<b>"+order.id+"</b><br>"+
+order.product+" × "+order.quantity+"<br>"+
+"Jami: "+order.total.toLocaleString("uz-UZ")+" so'm<br>"+
+"Holat: <span class='status'>"+order.status+"</span><br>"+
+"<span class='small'>"+order.date+"</span>";
+
+list.appendChild(div);
+
+});
+
+}
+
+function showSection(section){
+
+document.getElementById("shop").style.display=
+section==="shop"?"block":"none";
+
+document.getElementById("history").style.display=
+section==="history"?"block":"none";
+
+document.getElementById("admin").style.display="none";
+
+if(section==="history"){
+loadHistory();
+}
+
+}
+
+function adminLogin(){
+
+let password=prompt("Admin parolini kiriting:");
+
+if(password==="1234"){
+
+document.getElementById("shop").style.display="none";
+document.getElementById("history").style.display="none";
+document.getElementById("admin").style.display="block";
+
+loadAdmin();
+
+}else{
+
+alert("Parol noto'g'ri!");
+
+}
+
+}
+
+function loadAdmin(){
+
+let orders=JSON.parse(
+localStorage.getItem("uc_orders")||"[]"
+);
+
+document.getElementById("adminTotal").textContent=
+orders.length;
+
+document.getElementById("adminPending").textContent=
+orders.filter(x=>x.status==="Kutilmoqda").length;
+
+document.getElementById("adminCompleted").textContent=
+orders.filter(x=>x.status==="Tugallangan").length;
+
+let box=document.getElementById("adminOrders");
+
+box.innerHTML="";
+
+orders.slice().reverse().forEach((order,index)=>{
+
+let div=document.createElement("div");
+
+div.className="history-item";
+
+div.innerHTML=
+"<b>"+order.id+"</b><br>"+
+"Mahsulot: "+order.product+" × "+order.quantity+"<br>"+
+"PUBG ID: "+order.pubgid+"<br>"+
+"Telefon: "+order.phone+"<br>"+
+"Jami: "+order.total.toLocaleString("uz-UZ")+" so'm<br>"+
+"Holat: <span class='status'>"+order.status+"</span><br><br>"+
+"<button onclick=\"changeStatus("+index+")\">Holatni o'zgartirish</button>";
+
+box.appendChild(div);
+
+});
+
+}
+
+function changeStatus(index){
+
+let orders=JSON.parse(
+localStorage.getItem("uc_orders")||"[]"
+);
+
+let statuses=[
+"Kutilmoqda",
+"To'langan",
+"Jarayonda",
+"Tugallangan",
+"Bekor qilingan"
+];
+
+let choice=prompt(
+"Holatni tanlang:\n"+
+"1 - Kutilmoqda\n"+
+"2 - To'langan\n"+
+"3 - Jarayonda\n"+
+"4 - Tugallangan\n"+
+"5 - Bekor qilingan"
+);
+
+let number=parseInt(choice);
+
+if(number>=1 && number<=5){
+
+orders[index].status=statuses[number-1];
+
+localStorage.setItem(
+"uc_orders",
+JSON.stringify(orders)
+);
+
+loadAdmin();
+
+loadHistory();
+
+}
+
+}
+
+loadHistory();
 
 </script>
 
