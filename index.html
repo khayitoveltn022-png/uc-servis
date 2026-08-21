@@ -1,1 +1,295 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>UC SERVIS</title>
 
+<style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+  font-family:Arial,sans-serif;
+}
+
+body{
+  background:#070b12;
+  color:#fff;
+  padding-bottom:80px;
+}
+
+header{
+  background:linear-gradient(135deg,#111827,#172033);
+  padding:22px 15px;
+  text-align:center;
+  border-bottom:1px solid #293548;
+}
+
+.logo{
+  font-size:30px;
+  font-weight:bold;
+  color:#ffd700;
+}
+
+.subtitle{
+  color:#9ca3af;
+  margin-top:6px;
+}
+
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:15px;
+}
+
+.card{
+  background:#111827;
+  border:1px solid #293548;
+  border-radius:16px;
+  padding:16px;
+  margin-bottom:15px;
+}
+
+h2{
+  color:#ffd700;
+  margin-bottom:14px;
+  font-size:20px;
+}
+
+input,textarea{
+  width:100%;
+  padding:14px;
+  margin-bottom:10px;
+  border-radius:10px;
+  border:1px solid #374151;
+  background:#080d17;
+  color:#fff;
+  font-size:15px;
+}
+
+textarea{
+  min-height:110px;
+  resize:none;
+}
+
+.products{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+
+.product{
+  background:#0a101b;
+  border:1px solid #293548;
+  border-radius:13px;
+  padding:14px 8px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.product:hover{
+  border-color:#ffd700;
+}
+
+.product.active{
+  border:2px solid #ffd700;
+  background:#171e2b;
+}
+
+.ucicon{
+  font-size:30px;
+  margin-bottom:7px;
+}
+
+.product b{
+  display:block;
+  color:#ffd700;
+  margin-top:6px;
+  font-size:14px;
+}
+
+.total{
+  margin-top:14px;
+  padding:15px;
+  border-radius:12px;
+  background:#080d17;
+  text-align:center;
+  font-size:20px;
+}
+
+.total span{
+  color:#00ff88;
+  font-weight:bold;
+}
+
+.btn{
+  width:100%;
+  padding:14px;
+  margin-top:10px;
+  border:0;
+  border-radius:11px;
+  background:#ffd700;
+  color:#111;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.btn:active{
+  transform:scale(.98);
+}
+
+.notice{
+  background:#151e2d;
+  padding:13px;
+  border-radius:12px;
+  margin-bottom:15px;
+  color:#d1d5db;
+  line-height:1.5;
+}
+
+.order{
+  background:#080d17;
+  border-left:4px solid #ffd700;
+  border-radius:10px;
+  padding:13px;
+  margin-bottom:10px;
+  line-height:1.7;
+}
+
+.status{
+  color:#00ff88;
+  font-weight:bold;
+}
+
+.hidden{
+  display:none;
+}
+
+.error{
+  color:#ff5555;
+}
+
+nav{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:70px;
+  background:#111827;
+  border-top:1px solid #293548;
+  display:flex;
+  justify-content:space-around;
+  align-items:center;
+  z-index:100;
+}
+
+nav button{
+  background:none;
+  border:0;
+  color:#9ca3af;
+  font-size:11px;
+  cursor:pointer;
+}
+
+nav button div{
+  font-size:22px;
+  margin-bottom:3px;
+}
+
+nav button.active{
+  color:#ffd700;
+}
+
+.admin{
+  border-color:#8b3030;
+}
+
+@media(max-width:380px){
+  .products{
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">💎 UC SERVIS</div>
+  <div class="subtitle">PUBG Mobile UC xizmatlari</div>
+</header>
+
+<div class="container">
+
+<!-- BOSH SAHIFA -->
+
+<section id="home">
+
+  <div class="notice">
+    💎 PUBG Mobile UC buyurtma qilish uchun PUBG ID va telefon raqamingizni kiriting.
+  </div>
+
+  <div class="card">
+
+    <h2>🆔 PUBG ma'lumotlari</h2>
+
+    <input
+      id="pubgId"
+      type="text"
+      placeholder="PUBG ID raqamingiz"
+    >
+
+    <input
+      id="phone"
+      type="tel"
+      placeholder="Telefon raqamingiz"
+    >
+
+  </div>
+
+  <div class="card">
+
+    <h2>💎 UC paketini tanlang</h2>
+
+    <div class="products">
+
+      <div class="product"
+           onclick="selectUC(this,'60 UC',17000)">
+        <div class="ucicon">💎</div>
+        60 UC
+        <b>17 000 so'm</b>
+      </div>
+
+      <div class="product"
+           onclick="selectUC(this,'325 UC',84000)">
+        <div class="ucicon">💎</div>
+        325 UC
+        <b>84 000 so'm</b>
+      </div>
+
+      <div class="product"
+           onclick="selectUC(this,'660 UC',168000)">
+        <div class="ucicon">💎</div>
+        660 UC
+        <b>168 000 so'm</b>
+      </div>
+
+      <div class="product"
+           onclick="selectUC(this,'720 UC',189000)">
+        <div class="ucicon">💎</div>
+        720 UC
+        <b>189 000 so'm</b>
+      </div>
+
+      <div class="product"
+           onclick="selectUC(this,'960 UC',243600)">
+        <div class="ucicon">💎</div>
+        960 UC
+        <b>243 600 so'm</b>
+      </div>
+
+      <div class="product"
+           onclick="selectUC(this,'1080 UC',274050)">
