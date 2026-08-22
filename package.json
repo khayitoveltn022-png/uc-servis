@@ -1,0 +1,15 @@
+{
+  "name": "uc-servis",
+  "version": "1.0.0",
+  "description": "UC SERVIS - PUBG Mobile UC xizmatlari",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
