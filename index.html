@@ -2,214 +2,155 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>UC SERVIS</title>
 
 <style>
 *{
   box-sizing:border-box;
-  margin:0;
-  padding:0;
-  font-family:Arial,sans-serif;
 }
 
 body{
-  background:#070b12;
+  margin:0;
+  background:#080b10;
   color:#fff;
-  padding-bottom:80px;
+  font-family:Arial,sans-serif;
 }
 
 header{
-  background:linear-gradient(135deg,#111827,#172033);
   padding:22px 15px;
   text-align:center;
-  border-bottom:1px solid #293548;
+  background:#111722;
+  border-bottom:1px solid #293140;
 }
 
-.logo{
+header h1{
+  margin:0;
   font-size:30px;
-  font-weight:bold;
-  color:#ffd700;
 }
 
-.subtitle{
-  color:#9ca3af;
-  margin-top:6px;
+header p{
+  color:#aeb6c3;
+  margin:8px 0;
 }
 
 .container{
-  max-width:600px;
+  max-width:800px;
   margin:auto;
-  padding:15px;
+  padding:18px;
 }
 
-.card{
-  background:#111827;
-  border:1px solid #293548;
-  border-radius:16px;
-  padding:16px;
-  margin-bottom:15px;
+.nav{
+  display:flex;
+  gap:8px;
+  margin:20px 0;
 }
 
-h2{
-  color:#ffd700;
-  margin-bottom:14px;
-  font-size:20px;
+.nav button{
+  flex:1;
 }
 
-input,textarea{
-  width:100%;
-  padding:14px;
-  margin-bottom:10px;
+button{
+  border:0;
   border-radius:10px;
-  border:1px solid #374151;
-  background:#080d17;
-  color:#fff;
-  font-size:15px;
-}
-
-textarea{
-  min-height:110px;
-  resize:none;
-}
-
-.products{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-}
-
-.product{
-  background:#0a101b;
-  border:1px solid #293548;
-  border-radius:13px;
-  padding:14px 8px;
-  text-align:center;
+  padding:12px 16px;
+  background:#f5b400;
+  color:#111;
+  font-weight:bold;
   cursor:pointer;
-  transition:.2s;
 }
 
-.product:hover{
-  border-color:#ffd700;
+button:hover{
+  opacity:.9;
 }
 
-.product.active{
-  border:2px solid #ffd700;
-  background:#171e2b;
+.card,
+.form{
+  background:#151b25;
+  border:1px solid #293342;
+  border-radius:16px;
+  padding:18px;
+  margin:12px 0;
 }
 
-.ucicon{
-  font-size:30px;
-  margin-bottom:7px;
-}
-
-.product b{
+label{
   display:block;
-  color:#ffd700;
-  margin-top:6px;
-  font-size:14px;
+  margin-top:8px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:13px;
+  margin:7px 0 13px;
+  border-radius:9px;
+  border:1px solid #303a4a;
+  background:#0d1219;
+  color:white;
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#f5b400;
 }
 
 .total{
-  margin-top:14px;
-  padding:15px;
-  border-radius:12px;
-  background:#080d17;
-  text-align:center;
-  font-size:20px;
-}
-
-.total span{
-  color:#00ff88;
+  font-size:21px;
   font-weight:bold;
+  margin:15px 0;
 }
 
-.btn{
-  width:100%;
-  padding:14px;
-  margin-top:10px;
-  border:0;
-  border-radius:11px;
-  background:#ffd700;
-  color:#111;
-  font-size:16px;
-  font-weight:bold;
-  cursor:pointer;
+.small{
+  color:#9da6b3;
+  font-size:14px;
 }
 
-.btn:active{
-  transform:scale(.98);
+.ok{
+  color:#65e68b;
+  margin-top:12px;
 }
 
-.notice{
-  background:#151e2d;
-  padding:13px;
-  border-radius:12px;
-  margin-bottom:15px;
-  color:#d1d5db;
-  line-height:1.5;
-}
-
-.order{
-  background:#080d17;
-  border-left:4px solid #ffd700;
-  border-radius:10px;
-  padding:13px;
-  margin-bottom:10px;
-  line-height:1.7;
-}
-
-.status{
-  color:#00ff88;
-  font-weight:bold;
+.err{
+  color:#ff7676;
+  margin-top:12px;
 }
 
 .hidden{
   display:none;
 }
 
-.error{
-  color:#ff5555;
+.history{
+  background:#151b25;
+  border:1px solid #293342;
+  border-radius:14px;
+  padding:14px;
+  margin:10px 0;
 }
 
-nav{
-  position:fixed;
-  left:0;
-  right:0;
-  bottom:0;
-  height:70px;
-  background:#111827;
-  border-top:1px solid #293548;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  z-index:100;
+.status{
+  color:#ffd447;
+  font-weight:bold;
 }
 
-nav button{
-  background:none;
-  border:0;
-  color:#9ca3af;
-  font-size:11px;
-  cursor:pointer;
+.author{
+  text-align:center;
+  color:#8f9aaa;
+  margin:30px 0 10px;
+  font-size:13px;
 }
 
-nav button div{
-  font-size:22px;
-  margin-bottom:3px;
-}
+@media(max-width:500px){
 
-nav button.active{
-  color:#ffd700;
-}
+  header h1{
+    font-size:25px;
+  }
 
-.admin{
-  border-color:#8b3030;
-}
-
-@media(max-width:380px){
-  .products{
-    grid-template-columns:1fr;
+  .nav button{
+    padding:10px 5px;
+    font-size:12px;
   }
 }
 </style>
@@ -218,78 +159,859 @@ nav button.active{
 <body>
 
 <header>
-  <div class="logo">💎 UC SERVIS</div>
-  <div class="subtitle">PUBG Mobile UC xizmatlari</div>
+
+<h1>🔥 UC SERVIS</h1>
+
+<p>PUBG Mobile UC xizmatlari</p>
+
 </header>
+
 
 <div class="container">
 
-<!-- BOSH SAHIFA -->
 
-<section id="home">
+<!-- NAVIGATION -->
 
-  <div class="notice">
-    💎 PUBG Mobile UC buyurtma qilish uchun PUBG ID va telefon raqamingizni kiriting.
-  </div>
+<div class="nav">
 
-  <div class="card">
+<button onclick="page('shop')">
+🛒 Buyurtma
+</button>
 
-    <h2>🆔 PUBG ma'lumotlari</h2>
+<button onclick="page('history')">
+📋 Buyurtmalar
+</button>
 
-    <input
-      id="pubgId"
-      type="text"
-      placeholder="PUBG ID raqamingiz"
-    >
+<button onclick="page('complaint')">
+📝 Murojaat
+</button>
 
-    <input
-      id="phone"
-      type="tel"
-      placeholder="Telefon raqamingiz"
-    >
+</div>
 
-  </div>
 
-  <div class="card">
 
-    <h2>💎 UC paketini tanlang</h2>
+<!-- SHOP -->
 
-    <div class="products">
+<section id="shop">
 
-      <div class="product"
-           onclick="selectUC(this,'60 UC',17000)">
-        <div class="ucicon">💎</div>
-        60 UC
-        <b>17 000 so'm</b>
-      </div>
+<div class="form">
 
-      <div class="product"
-           onclick="selectUC(this,'325 UC',84000)">
-        <div class="ucicon">💎</div>
-        325 UC
-        <b>84 000 so'm</b>
-      </div>
+<h2>💎 UC buyurtma</h2>
 
-      <div class="product"
-           onclick="selectUC(this,'660 UC',168000)">
-        <div class="ucicon">💎</div>
-        660 UC
-        <b>168 000 so'm</b>
-      </div>
+<label>
+UC miqdori
+</label>
 
-      <div class="product"
-           onclick="selectUC(this,'720 UC',189000)">
-        <div class="ucicon">💎</div>
-        720 UC
-        <b>189 000 so'm</b>
-      </div>
+<input
+id="uc"
+type="number"
+min="60"
+max="30000"
+placeholder="Masalan: 720"
+oninput="quote()"
+>
 
-      <div class="product"
-           onclick="selectUC(this,'960 UC',243600)">
-        <div class="ucicon">💎</div>
-        960 UC
-        <b>243 600 so'm</b>
-      </div>
+<div class="small">
+60–30 000 UC. Istalgan miqdorni kiriting.
+</div>
 
-      <div class="product"
-           onclick="selectUC(this,'1080 UC',274050)">
+
+<div class="total">
+
+Jami:
+
+<span id="price">
+0
+</span>
+
+so‘m
+
+</div>
+
+
+<label>
+🆔 PUBG ID
+</label>
+
+<input
+id="pubg"
+placeholder="PUBG ID"
+>
+
+
+<label>
+📱 Telefon
+</label>
+
+<input
+id="phone"
+placeholder="+998 XX XXX XX XX"
+>
+
+
+<label>
+💳 To‘lov
+</label>
+
+<select id="payment">
+
+<option>Payme</option>
+
+<option>Uzcard</option>
+
+<option>Humo</option>
+
+</select>
+
+
+<button
+style="width:100%"
+onclick="order()"
+>
+
+🛒 Buyurtma berish
+
+</button>
+
+
+<div id="msg"></div>
+
+</div>
+
+</section>
+
+
+
+<!-- HISTORY -->
+
+<section
+id="history"
+class="hidden"
+>
+
+<div class="form">
+
+<h2>
+📋 Buyurtmalarim
+</h2>
+
+<input
+id="hphone"
+placeholder="Telefon raqamingiz"
+>
+
+<button onclick="historyLoad()">
+Ko‘rish
+</button>
+
+</div>
+
+
+<div id="list"></div>
+
+</section>
+
+
+
+<!-- COMPLAINT -->
+
+<section
+id="complaint"
+class="hidden"
+>
+
+<div class="form">
+
+<h2>
+📝 Shikoyat / murojaat
+</h2>
+
+
+<input
+id="cphone"
+placeholder="Telefon"
+>
+
+
+<textarea
+id="ctext"
+rows="6"
+placeholder="Murojaatingiz..."
+></textarea>
+
+
+<button
+style="width:100%"
+onclick="complaint()"
+>
+
+Yuborish
+
+</button>
+
+
+<div id="cmsg"></div>
+
+</div>
+
+</section>
+
+
+
+<div class="author">
+
+Muallif: khayitovEldor
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+/* =====================================
+   UC NARXLARI
+===================================== */
+
+const prices = [
+
+[60,11500],
+
+[120,23000],
+
+[180,34500],
+
+[240,46000],
+
+[300,57500],
+
+[360,69000],
+
+[420,80500],
+
+[480,92000],
+
+[540,103500],
+
+[600,115000],
+
+[660,117000],
+
+[720,126000],
+
+[840,147000],
+
+[960,223500],
+
+[1080,251500],
+
+[1200,279500],
+
+[1500,346000],
+
+[1800,392500],
+
+[2000,439000],
+
+[2500,545500],
+
+[3000,651500],
+
+[4000,864500],
+
+[5000,1064000],
+
+[6000,1263500],
+
+[8000,1662500],
+
+[10000,2061500],
+
+[15000,3059000],
+
+[20000,4056500],
+
+[25000,5054000],
+
+[30000,6051500]
+
+];
+
+
+
+/* =====================================
+   SERVER
+===================================== */
+
+/*
+   Agar backend boshqa manzilda bo‘lsa,
+   shu yerga backend URL yoziladi.
+
+   Masalan:
+
+   const API =
+   "https://sizning-backend-saytingiz.com";
+
+*/
+
+const API = "";
+
+
+
+/* =====================================
+   PUL FORMAT
+===================================== */
+
+function money(number){
+
+  return Number(number || 0)
+    .toLocaleString("uz-UZ");
+
+}
+
+
+
+/* =====================================
+   UC NARXINI HISOBLASH
+===================================== */
+
+function localQuote(q){
+
+  if(q < 60 || q > 30000){
+
+    return null;
+
+  }
+
+
+  for(let i = 0; i < prices.length - 1; i++){
+
+    if(q === prices[i][0]){
+
+      return prices[i][1];
+
+    }
+
+
+    if(
+      q > prices[i][0] &&
+      q < prices[i + 1][0]
+    ){
+
+      return Math.round(
+
+        prices[i][1]
+
+        +
+
+        (q - prices[i][0])
+
+        *
+
+        (
+
+          prices[i + 1][1]
+          -
+          prices[i][1]
+
+        )
+
+        /
+
+        (
+
+          prices[i + 1][0]
+          -
+          prices[i][0]
+
+        )
+
+      );
+
+    }
+
+  }
+
+
+  return prices[prices.length - 1][1];
+
+}
+
+
+
+/* =====================================
+   NARXNI KO‘RSATISH
+===================================== */
+
+function quote(){
+
+  const q =
+    Number(
+      document.getElementById("uc").value
+    ) || 0;
+
+
+  const p =
+    localQuote(q);
+
+
+  document.getElementById("price")
+    .textContent =
+    p
+      ? money(p)
+      : "0";
+
+}
+
+
+
+/* =====================================
+   API
+===================================== */
+
+async function api(url, options = {}){
+
+  const response =
+    await fetch(
+      API + url,
+      {
+
+        ...options,
+
+        headers:{
+
+          "Content-Type":
+            "application/json",
+
+          ...(options.headers || {})
+
+        }
+
+      }
+    );
+
+
+  const data =
+    await response.json();
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data.error ||
+      "Xatolik yuz berdi"
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+
+/* =====================================
+   BUYURTMA
+===================================== */
+
+async function order(){
+
+  const q =
+    Number(
+      document.getElementById("uc").value
+    ) || 0;
+
+
+  const pubgId =
+    document
+      .getElementById("pubg")
+      .value
+      .trim();
+
+
+  const phone =
+    document
+      .getElementById("phone")
+      .value
+      .trim();
+
+
+  const payment =
+    document
+      .getElementById("payment")
+      .value;
+
+
+  if(!localQuote(q)){
+
+    show(
+
+      "msg",
+
+      "UC miqdori 60–30 000 oralig‘ida bo‘lishi kerak.",
+
+      true
+
+    );
+
+    return;
+
+  }
+
+
+  if(!pubgId){
+
+    show(
+      "msg",
+      "PUBG ID kiriting.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  if(!phone){
+
+    show(
+      "msg",
+      "Telefon raqam kiriting.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    const data =
+      await api(
+
+        "/api/orders",
+
+        {
+
+          method:"POST",
+
+          body:JSON.stringify({
+
+            uc:q,
+
+            pubgId:pubgId,
+
+            phone:phone,
+
+            payment:payment
+
+          })
+
+        }
+
+      );
+
+
+    show(
+
+      "msg",
+
+      "✅ Buyurtma qabul qilindi. Buyurtma № " +
+
+      data.orderId
+
+    );
+
+
+  }
+
+  catch(error){
+
+    show(
+      "msg",
+      error.message,
+      true
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   BUYURTMALAR TARIXI
+===================================== */
+
+async function historyLoad(){
+
+  const phone =
+    document
+      .getElementById("hphone")
+      .value
+      .trim();
+
+
+  if(!phone){
+
+    document.getElementById("list")
+      .textContent =
+      "Telefon raqamingizni kiriting.";
+
+    return;
+
+  }
+
+
+  try{
+
+    const data =
+      await api(
+
+        "/api/orders?phone=" +
+        encodeURIComponent(phone)
+
+      );
+
+
+    const list =
+      document.getElementById("list");
+
+
+    if(
+      !data.orders ||
+      data.orders.length === 0
+    ){
+
+      list.innerHTML =
+        `<div class="card">
+          Buyurtma topilmadi.
+        </div>`;
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      data.orders
+        .slice()
+        .reverse()
+        .map(
+
+          order => `
+
+          <div class="history">
+
+            <b>
+              Buyurtma #${order.id}
+            </b>
+
+            <p>
+              💎 ${Number(order.uc).toLocaleString()}
+              UC
+            </p>
+
+            <p>
+              💰 ${money(order.price)}
+              so‘m
+            </p>
+
+            <p>
+              🧾 ${order.status}
+            </p>
+
+            <p class="small">
+              ${order.createdAt}
+            </p>
+
+          </div>
+
+          `
+
+        )
+        .join("");
+
+
+  }
+
+  catch(error){
+
+    document.getElementById("list")
+      .textContent =
+      error.message;
+
+  }
+
+}
+
+
+
+/* =====================================
+   MUROJAAT
+===================================== */
+
+async function complaint(){
+
+  const phone =
+    document
+      .getElementById("cphone")
+      .value
+      .trim();
+
+
+  const text =
+    document
+      .getElementById("ctext")
+      .value
+      .trim();
+
+
+  if(!phone || !text){
+
+    show(
+
+      "cmsg",
+
+      "Telefon va murojaatni kiriting.",
+
+      true
+
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await api(
+
+      "/api/complaints",
+
+      {
+
+        method:"POST",
+
+        body:JSON.stringify({
+
+          phone:phone,
+
+          text:text
+
+        })
+
+      }
+
+    );
+
+
+    show(
+      "cmsg",
+      "✅ Murojaat yuborildi."
+    );
+
+
+    document
+      .getElementById("ctext")
+      .value = "";
+
+
+  }
+
+  catch(error){
+
+    show(
+      "cmsg",
+      error.message,
+      true
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   XABAR
+===================================== */
+
+function show(
+  id,
+  text,
+  error = false
+){
+
+  const element =
+    document.getElementById(id);
+
+
+  element.className =
+    error
+      ? "err"
+      : "ok";
+
+
+  element.textContent =
+    text;
+
+}
+
+
+
+/* =====================================
+   SAHIFA ALMASHTIRISH
+===================================== */
+
+function page(id){
+
+  const pages = [
+
+    "shop",
+
+    "history",
+
+    "complaint"
+
+  ];
+
+
+  pages.forEach(
+
+    name => {
+
+      document
+        .getElementById(name)
+        .classList
+        .add("hidden");
+
+    }
+
+  );
+
+
+  document
+    .getElementById(id)
+    .classList
+    .remove("hidden");
+
+}
+
+
+
+/* =====================================
+   BOSHLANG‘ICH SAHIFA
+===================================== */
+
+page("shop");
+
+</script>
+
+</body>
+</html>
