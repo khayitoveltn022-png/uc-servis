@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>UC SERVIS — Admin</title>
+
+<style>
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#080b10;
+  color:#fff;
+  font-family:Arial,sans-serif;
+}
+
+header{
+  background:#111722;
+  border-bottom:1px solid #293140;
+  padding:20px 15px;
+  text-align:center;
+}
+
+header h1{
+  margin:0;
+  font-size:27px;
+}
+
+header p{
+  color:#aeb6c3;
+  margin:8px 0 0;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:18px;
+}
+
+.card{
+  background:#151b25;
+  border:1px solid #293342;
+  border-radius:15px;
+  padding:18px;
+  margin:12px 0;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:13px;
+  margin:7px 0 13px;
+  border-radius:9px;
+  border:1px solid #303a4a;
+  background:#0d1219;
+  color:#fff;
+  outline:none;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+  border-color:#f5b400;
+}
+
+button{
+  border:0;
+  border-radius:10px;
+  padding:12px 16px;
+  background:#f5b400;
+  color:#111;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+button:hover{
+  opacity:.9;
+}
+
+.danger{
+  background:#e74c3c;
+  color:#fff;
+}
+
+.green{
+  background:#35c76f;
+  color:#fff;
+}
+
+.blue{
+  background:#3478f6;
+  color:#fff;
+}
+
+.nav{
+  display:flex;
+  gap:8px;
+  margin-bottom:18px;
+}
+
+.nav button{
+  flex:1;
+}
+
+.hidden{
+  display:none;
+}
+
+.order{
+  background:#101620;
+  border:1px solid #303a4a;
+  border-radius:13px;
+  padding:15px;
+  margin:10px 0;
+}
+
+.complaint{
+  background:#101620;
+  border:1px solid #303a4a;
+  border-radius:13px;
+  padding:15px;
+  margin:10px 0;
+}
+
+.status{
+  color:#ffd447;
+  font-weight:bold;
+}
+
+.ok{
+  color:#65e68b;
+  margin:10px 0;
+}
+
+.err{
+  color:#ff7676;
+  margin:10px 0;
+}
+
+.small{
+  color:#9da6b3;
+  font-size:13px;
+}
+
+.row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.row button{
+  flex:1;
+  min-width:120px;
+}
+
+.login{
+  max-width:450px;
+  margin:40px auto;
+}
+
+.total{
+  font-size:20px;
+  font-weight:bold;
+  color:#f5b400;
+}
+
+@media(max-width:600px){
+
+  .nav{
+    flex-direction:column;
+  }
+
+  .row{
+    flex-direction:column;
+  }
+
+  .row button{
+    width:100%;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+
+<h1>🔐 UC SERVIS — ADMIN</h1>
+
+<p>Buyurtmalar va murojaatlarni boshqarish</p>
+
+</header>
+
+
+<div class="container">
+
+
+<!-- LOGIN -->
+
+<section id="login">
+
+<div class="card login">
+
+<h2>🔑 Admin kirish</h2>
+
+<label>
+Admin parol
+</label>
+
+<input
+id="password"
+type="password"
+placeholder="Admin parolini kiriting"
+>
+
+<button
+style="width:100%"
+onclick="login()"
+>
+Kirish
+</button>
+
+<div id="loginMsg"></div>
+
+</div>
+
+</section>
+
+
+
+<!-- ADMIN -->
+
+<section
+id="admin"
+class="hidden"
+>
+
+
+<div class="nav">
+
+<button onclick="showPage('orders')">
+📦 Buyurtmalar
+</button>
+
+<button onclick="showPage('complaints')">
+📝 Murojaatlar
+</button>
+
+<button
+class="danger"
+onclick="logout()"
+>
+🚪 Chiqish
+</button>
+
+</div>
+
+
+
+<!-- ORDERS -->
+
+<section id="orders">
+
+<div class="card">
+
+<h2>📦 Buyurtmalar</h2>
+
+<div class="row">
+
+<button
+onclick="loadOrders()"
+>
+🔄 Yangilash
+</button>
+
+</div>
+
+<div id="ordersMsg"></div>
+
+</div>
+
+
+<div id="ordersList"></div>
+
+</section>
+
+
+
+<!-- COMPLAINTS -->
+
+<section
+id="complaints"
+class="hidden"
+>
+
+<div class="card">
+
+<h2>📝 Murojaatlar</h2>
+
+<button
+onclick="loadComplaints()"
+>
+🔄 Yangilash
+</button>
+
+<div id="complaintsMsg"></div>
+
+</div>
+
+<div id="complaintsList"></div>
+
+</section>
+
+
+</section>
+
+</div>
+
+
+
+<script>
+
+/* =====================================
+   API
+===================================== */
+
+const API = "";
+
+
+
+/* =====================================
+   LOGIN
+===================================== */
+
+function login(){
+
+  const password =
+    document
+      .getElementById("password")
+      .value
+      .trim();
+
+
+  if(!password){
+
+    show(
+      "loginMsg",
+      "Admin parolini kiriting.",
+      true
+    );
+
+    return;
+
+  }
+
+
+  localStorage.setItem(
+    "uc_admin_password",
+    password
+  );
+
+
+  document
+    .getElementById("login")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("admin")
+    .classList
+    .remove("hidden");
+
+
+  loadOrders();
+
+}
+
+
+
+/* =====================================
+   LOGOUT
+===================================== */
+
+function logout(){
+
+  localStorage.removeItem(
+    "uc_admin_password"
+  );
+
+
+  document
+    .getElementById("admin")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById("login")
+    .classList
+    .remove("hidden");
+
+
+  document
+    .getElementById("password")
+    .value = "";
+
+}
+
+
+
+/* =====================================
+   API REQUEST
+===================================== */
+
+async function api(
+  url,
+  options = {}
+){
+
+  const password =
+    localStorage.getItem(
+      "uc_admin_password"
+    );
+
+
+  const response =
+    await fetch(
+      API + url,
+      {
+
+        ...options,
+
+        headers:{
+
+          "Content-Type":
+            "application/json",
+
+          "x-admin-password":
+            password || "",
+
+          ...(options.headers || {})
+
+        }
+
+      }
+    );
+
+
+  let data =
