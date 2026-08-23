@@ -9,7 +9,90 @@
 *{
   box-sizing:border-box;
 }
+<script>
+const UC_API = "";
 
+async function checkPubgId() {
+    const input = document.querySelector(
+        'input[name="player_id"], input[id="player_id"], #player_id'
+    );
+
+    if (!input) {
+        alert("PUBG ID input topilmadi.");
+        return;
+    }
+
+    const playerId = input.value.trim();
+
+    if (!playerId) {
+        alert("PUBG ID kiriting.");
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/pubg/validate", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                player_id: playerId
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+            alert(
+                "PUBG ID tekshirilmadi: " +
+                (data.error || "Noma'lum xato")
+            );
+            return;
+        }
+
+        alert(
+            "✅ PUBG ID tasdiqlandi!" +
+            (data.player_name
+                ? "\nNick: " + data.player_name
+                : "")
+        );
+
+    } catch (error) {
+        alert("Server bilan aloqa qilishda xato.");
+        console.error(error);
+    }
+}
+
+
+// ===============================
+// FAZERCARDS UC OFFERLARI
+// ===============================
+async function loadFazerOffers() {
+    try {
+        const response = await fetch("/api/pubg/offers");
+        const data = await response.json();
+
+        if (!response.ok || !data.ok) {
+            console.error(data.error);
+            return;
+        }
+
+        console.log("FazerCards UC offerlari:", data.offers);
+
+        /*
+          Bu yerda FazerCards'dagi real offerlar
+          konsolga chiqariladi.
+
+          Keyingi bosqichda ularni sizning
+          UC SERVIS narxlaringizga bog'laymiz.
+        */
+    } catch (error) {
+        console.error("Offerlarni olishda xato:", error);
+    }
+}
+
+loadFazerOffers();
+</script>
 body{
   margin:0;
   background:#080b10;
