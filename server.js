@@ -1,6 +1,5 @@
 const express = require("express");
 const path = require("path");
-const crypto = require("crypto");
 
 const app = express();
 
@@ -20,16 +19,13 @@ app.use(express.static(__dirname));
 async function g2bulkRequest(endpoint, options = {}) {
 
     if (!G2BULK_API_KEY) {
-        throw new Error(
-            "G2BULK_API_KEY Render Environment'da topilmadi."
-        );
+        throw new Error("G2BULK_API_KEY topilmadi.");
     }
 
     const response = await fetch(
-        `${G2BULK_API}${endpoint}`,
+        G2BULK_API + endpoint,
         {
             ...options,
-
             headers: {
                 "X-API-Key": G2BULK_API_KEY,
                 "Content-Type": "application/json",
@@ -47,12 +43,11 @@ async function g2bulkRequest(endpoint, options = {}) {
     } catch {
         data = {
             success: false,
-            message: text || "G2Bulk noma'lum javob qaytardi."
+            message: text
         };
     }
 
     if (!response.ok || data.success === false) {
-
         throw new Error(
             data.message ||
             data.error ||
@@ -62,6 +57,35 @@ async function g2bulkRequest(endpoint, options = {}) {
 
     return data;
 }
+
+
+// =====================================
+// UC → G2BULK CATALOGUE
+// =====================================
+
+const G2BULK_CATALOGUE = {
+
+    60: "60",
+    325: "325",
+    660: "660",
+    985: "985",
+    1320: "1320",
+
+    1800: "1800 UC (discounted)",
+
+    2460: "2460",
+
+    3850: "3850 UC (discounted)",
+
+    5650: "5650",
+
+    8100: "8100 UC (discounted)",
+
+    11950: "11950",
+
+    16200: "16200"
+
+};
 
 
 // =====================================
@@ -94,7 +118,7 @@ app.get("/admin", (req, res) => {
 // SERVER STATUS
 // =====================================
 
-app.get("/api/status", async (req, res) => {
+app.get("/api/status", (req, res) => {
 
     res.json({
         ok: true,
@@ -106,7 +130,7 @@ app.get("/api/status", async (req, res) => {
 
 
 // =====================================
-// G2BULK STATUS / API KEY TEST
+// G2BULK STATUS
 // =====================================
 
 app.get("/api/g2bulk/status", async (req, res) => {
@@ -119,8 +143,7 @@ app.get("/api/g2bulk/status", async (req, res) => {
         res.json({
             ok: true,
             message: "G2Bulk API ulandi.",
-            balance: data.balance,
-            username: data.username
+            data
         });
 
     } catch (error) {
@@ -148,8 +171,7 @@ app.get("/api/balance", async (req, res) => {
 
         res.json({
             ok: true,
-            balance: data.balance,
-            username: data.username
+            data
         });
 
     } catch (error) {
@@ -165,7 +187,7 @@ app.get("/api/balance", async (req, res) => {
 
 
 // =====================================
-// PUBG CATALOG
+// PUBG CATALOGUE
 // =====================================
 
 app.get("/api/pubg/catalogue", async (req, res) => {
@@ -195,7 +217,7 @@ app.get("/api/pubg/catalogue", async (req, res) => {
 
 
 // =====================================
-// PUBG PLAYER VALIDATION
+// PUBG ID VALIDATION
 // =====================================
 
 app.post("/api/pubg/validate", async (req, res) => {
@@ -216,7 +238,6 @@ app.post("/api/pubg/validate", async (req, res) => {
 
         }
 
-
         const data =
             await g2bulkRequest(
                 "/games/checkPlayerId",
@@ -224,21 +245,20 @@ app.post("/api/pubg/validate", async (req, res) => {
                     method: "POST",
 
                     body: JSON.stringify({
-
                         game: "pubgm",
-
                         user_id: playerId
-
                     })
                 }
             );
 
-
         res.json({
             ok: true,
             valid: data.valid,
-            player_name: data.name || null,
-            openid: data.openid || null
+            player_name:
+                data.name ||
+                data.player_name ||
+                null,
+            data
         });
 
     } catch (error) {
@@ -254,13 +274,10 @@ app.post("/api/pubg/validate", async (req, res) => {
 
 
 // =====================================
-// G2BULK PLACE ORDER
+// REAL G2BULK ORDER
 // =====================================
 //
-// MUHIM:
-// Bu endpoint real UC sotib oladi.
-// Uni faqat mijoz to'lovi tasdiqlangandan
-// keyin chaqirish kerak.
+// Bu endpoint REAL UC sotib oladi.
 // =====================================
 
 app.post("/api/g2bulk/order", async (req, res) => {
@@ -269,12 +286,20 @@ app.post("/api/g2bulk/order", async (req, res) => {
 
         const {
             player_id,
-            catalogue_name,
+            uc,
             remark
         } = req.body;
 
 
-        if (!player_id) {
+        const playerId =
+            String(player_id || "").trim();
+
+
+        const amount =
+            Number(uc);
+
+
+        if (!playerId) {
 
             return res.status(400).json({
                 ok: false,
@@ -284,17 +309,38 @@ app.post("/api/g2bulk/order", async (req, res) => {
         }
 
 
-        if (!catalogue_name) {
+        if (!amount) {
 
             return res.status(400).json({
                 ok: false,
-                error: "UC paketi tanlanmagan."
+                error: "UC miqdori kiritilmagan."
             });
 
         }
 
 
-        // PUBG ID validation
+        const catalogueName =
+            G2BULK_CATALOGUE[amount];
+
+
+        if (!catalogueName) {
+
+            return res.status(400).json({
+                ok: false,
+                error:
+                    "Bu UC miqdori G2Bulk katalogida mavjud emas.",
+                available:
+                    Object.keys(
+                        G2BULK_CATALOGUE
+                    ).map(Number)
+            });
+
+        }
+
+
+        // =================================
+        // PLAYER ID VALIDATION
+        // =================================
 
         const validation =
             await g2bulkRequest(
@@ -303,20 +349,16 @@ app.post("/api/g2bulk/order", async (req, res) => {
                     method: "POST",
 
                     body: JSON.stringify({
-
                         game: "pubgm",
-
-                        user_id:
-                            String(player_id).trim()
-
+                        user_id: playerId
                     })
                 }
             );
 
 
         if (
-            !validation.valid ||
-            validation.valid !== "valid"
+            validation.valid === false ||
+            validation.valid === "false"
         ) {
 
             return res.status(400).json({
@@ -328,20 +370,9 @@ app.post("/api/g2bulk/order", async (req, res) => {
         }
 
 
-        // Idempotency key
-        // Bir xil order ikki marta
-        // yuborilib ketishidan himoya.
-
-        const idempotencyKey =
-            crypto.randomUUID();
-
-
-        const orderRemark =
-            remark ||
-            `UC SERVIS ${Date.now()}`;
-
-
-        // REAL G2BULK ORDER
+        // =================================
+        // CREATE REAL ORDER
+        // =================================
 
         const order =
             await g2bulkRequest(
@@ -349,21 +380,17 @@ app.post("/api/g2bulk/order", async (req, res) => {
                 {
                     method: "POST",
 
-                    headers: {
-                        "X-Idempotency-Key":
-                            idempotencyKey
-                    },
-
                     body: JSON.stringify({
 
                         catalogue_name:
-                            catalogue_name,
+                            catalogueName,
 
                         player_id:
-                            String(player_id).trim(),
+                            playerId,
 
                         remark:
-                            orderRemark
+                            remark ||
+                            `UC SERVIS - ${amount} UC`
 
                     })
                 }
@@ -371,16 +398,23 @@ app.post("/api/g2bulk/order", async (req, res) => {
 
 
         res.json({
+
             ok: true,
 
             message:
                 "G2Bulk buyurtmasi yaratildi.",
 
-            player_name:
-                validation.name || null,
+            catalogue_name:
+                catalogueName,
+
+            player_id:
+                playerId,
+
+            uc:
+                amount,
 
             order:
-                order.order || order
+                order
 
         });
 
@@ -400,125 +434,103 @@ app.post("/api/g2bulk/order", async (req, res) => {
 // G2BULK ORDER STATUS
 // =====================================
 
-app.post("/api/g2bulk/order/status", async (req, res) => {
+app.post(
+    "/api/g2bulk/order/status",
+    async (req, res) => {
 
-    try {
+        try {
 
-        const {
-            order_id
-        } = req.body;
+            const orderId =
+                req.body.order_id;
 
+            if (!orderId) {
 
-        if (!order_id) {
+                return res.status(400).json({
+                    ok: false,
+                    error:
+                        "G2Bulk order ID kiritilmagan."
+                });
 
-            return res.status(400).json({
+            }
+
+            const data =
+                await g2bulkRequest(
+                    "/games/order/status",
+                    {
+                        method: "POST",
+
+                        body: JSON.stringify({
+                            order_id: orderId
+                        })
+                    }
+                );
+
+            res.json({
+                ok: true,
+                data
+            });
+
+        } catch (error) {
+
+            res.status(400).json({
                 ok: false,
-                error: "G2Bulk order_id kiritilmagan."
+                error: error.message
             });
 
         }
 
-
-        const data =
-            await g2bulkRequest(
-                "/games/order/status",
-                {
-                    method: "POST",
-
-                    body: JSON.stringify({
-                        order_id: order_id
-                    })
-                }
-            );
+    }
+);
 
 
-        res.json({
-            ok: true,
-            data: data
-        });
+// =====================================
+// ORDER BY ID
+// =====================================
 
-    } catch (error) {
+app.get(
+    "/api/g2bulk/order/:id",
+    async (req, res) => {
 
-        res.status(400).json({
-            ok: false,
-            error: error.message
-        });
+        try {
+
+            const id =
+                encodeURIComponent(
+                    req.params.id
+                );
+
+            const data =
+                await g2bulkRequest(
+                    `/orders/${id}`,
+                    {
+                        method: "GET"
+                    }
+                );
+
+            res.json({
+                ok: true,
+                order: data
+            });
+
+        } catch (error) {
+
+            res.status(400).json({
+                ok: false,
+                error: error.message
+            });
+
+        }
 
     }
-
-});
-
-
-// =====================================
-// G2BULK ORDER BY ID
-// =====================================
-
-app.get("/api/g2bulk/order/:id", async (req, res) => {
-
-    try {
-
-        const id =
-            encodeURIComponent(
-                req.params.id
-            );
-
-
-        const data =
-            await g2bulkRequest(
-                `/orders/${id}`,
-                {
-                    method: "GET"
-                }
-            );
-
-
-        res.json({
-            ok: true,
-            order: data
-        });
-
-    } catch (error) {
-
-        res.status(400).json({
-            ok: false,
-            error: error.message
-        });
-
-    }
-
-});
+);
 
 
 // =====================================
-// WEBHOOK
+// CUSTOMER ORDER
 // =====================================
 //
-// G2Bulk callback yuborsa shu endpoint
-// statusni qabul qiladi.
-// =====================================
-
-app.post("/webhook/order-status", (req, res) => {
-
-    console.log(
-        "G2BULK WEBHOOK:",
-        JSON.stringify(req.body)
-    );
-
-    res.status(200).json({
-        ok: true
-    });
-
-});
-
-
-// =====================================
-// FRONTEND ORDER
-// =====================================
-//
-// Hozirgi saytning buyurtmasi.
-// Bu endpoint G2Bulk'ga avtomatik pul
-// sarflamaydi.
-// Avval to'lov tasdiqlanishi kerak.
+// Hozircha mijoz buyurtmasini qabul qiladi.
+// G2Bulk'ga pul sarflashni avtomatik
+// boshlamaydi.
 // =====================================
 
 app.post("/api/order", (req, res) => {
@@ -552,6 +564,16 @@ app.post("/api/order", (req, res) => {
     }
 
 
+    if (!price) {
+
+        return res.status(400).json({
+            ok: false,
+            error: "Narx aniqlanmadi."
+        });
+
+    }
+
+
     if (!phone) {
 
         return res.status(400).json({
@@ -567,7 +589,7 @@ app.post("/api/order", (req, res) => {
 
 
     console.log(
-        "YANGI UC BUYURTMA:",
+        "UC SERVIS ORDER:",
         {
             orderId,
             player_id,
@@ -616,7 +638,7 @@ app.post("/api/order", (req, res) => {
 
 
 // =====================================
-// ORDERS
+// ORDERS HISTORY
 // =====================================
 
 app.get("/api/orders", (req, res) => {
@@ -668,6 +690,27 @@ app.post("/api/complaints", (req, res) => {
     });
 
 });
+
+
+// =====================================
+// WEBHOOK
+// =====================================
+
+app.post(
+    "/webhook/order-status",
+    (req, res) => {
+
+        console.log(
+            "G2BULK WEBHOOK:",
+            JSON.stringify(req.body)
+        );
+
+        res.json({
+            ok: true
+        });
+
+    }
+);
 
 
 // =====================================
