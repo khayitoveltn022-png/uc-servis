@@ -9,90 +9,7 @@
 *{
   box-sizing:border-box;
 }
-<script>
-const UC_API = "";
 
-async function checkPubgId() {
-    const input = document.querySelector(
-        'input[name="player_id"], input[id="player_id"], #player_id'
-    );
-
-    if (!input) {
-        alert("PUBG ID input topilmadi.");
-        return;
-    }
-
-    const playerId = input.value.trim();
-
-    if (!playerId) {
-        alert("PUBG ID kiriting.");
-        return;
-    }
-
-    try {
-        const response = await fetch("/api/pubg/validate", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                player_id: playerId
-            })
-        });
-
-        const data = await response.json();
-
-        if (!response.ok || !data.ok) {
-            alert(
-                "PUBG ID tekshirilmadi: " +
-                (data.error || "Noma'lum xato")
-            );
-            return;
-        }
-
-        alert(
-            "✅ PUBG ID tasdiqlandi!" +
-            (data.player_name
-                ? "\nNick: " + data.player_name
-                : "")
-        );
-
-    } catch (error) {
-        alert("Server bilan aloqa qilishda xato.");
-        console.error(error);
-    }
-}
-
-
-// ===============================
-// FAZERCARDS UC OFFERLARI
-// ===============================
-async function loadFazerOffers() {
-    try {
-        const response = await fetch("/api/pubg/offers");
-        const data = await response.json();
-
-        if (!response.ok || !data.ok) {
-            console.error(data.error);
-            return;
-        }
-
-        console.log("FazerCards UC offerlari:", data.offers);
-
-        /*
-          Bu yerda FazerCards'dagi real offerlar
-          konsolga chiqariladi.
-
-          Keyingi bosqichda ularni sizning
-          UC SERVIS narxlaringizga bog'laymiz.
-        */
-    } catch (error) {
-        console.error("Offerlarni olishda xato:", error);
-    }
-}
-
-loadFazerOffers();
-</script>
 body{
   margin:0;
   background:#080b10;
@@ -147,6 +64,11 @@ button:hover{
   opacity:.9;
 }
 
+button:disabled{
+  opacity:.5;
+  cursor:not-allowed;
+}
+
 .card,
 .form{
   background:#151b25;
@@ -159,6 +81,7 @@ button:hover{
 label{
   display:block;
   margin-top:8px;
+  font-weight:bold;
 }
 
 input,
@@ -194,11 +117,13 @@ textarea:focus{
 .ok{
   color:#65e68b;
   margin-top:12px;
+  white-space:pre-line;
 }
 
 .err{
   color:#ff7676;
   margin-top:12px;
+  white-space:pre-line;
 }
 
 .hidden{
@@ -218,6 +143,48 @@ textarea:focus{
   font-weight:bold;
 }
 
+.uc-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+  margin:15px 0;
+}
+
+.uc-item{
+  background:#0d1219;
+  border:1px solid #303a4a;
+  border-radius:12px;
+  padding:14px;
+  cursor:pointer;
+  text-align:center;
+}
+
+.uc-item:hover{
+  border-color:#f5b400;
+}
+
+.uc-item.active{
+  border-color:#f5b400;
+  box-shadow:0 0 0 1px #f5b400;
+}
+
+.uc-name{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.uc-price{
+  margin-top:6px;
+  color:#ffd447;
+  font-weight:bold;
+}
+
+.loading{
+  text-align:center;
+  color:#9da6b3;
+  padding:15px;
+}
+
 .author{
   text-align:center;
   color:#8f9aaa;
@@ -235,6 +202,10 @@ textarea:focus{
     padding:10px 5px;
     font-size:12px;
   }
+
+  .uc-grid{
+    grid-template-columns:1fr 1fr;
+  }
 }
 </style>
 </head>
@@ -242,18 +213,11 @@ textarea:focus{
 <body>
 
 <header>
-
-<h1>🔥 UC SERVIS</h1>
-
-<p>PUBG Mobile UC xizmatlari</p>
-
+  <h1>🔥 UC SERVIS</h1>
+  <p>PUBG Mobile UC xizmatlari</p>
 </header>
 
-
 <div class="container">
-
-
-<!-- NAVIGATION -->
 
 <div class="nav">
 
@@ -272,8 +236,7 @@ textarea:focus{
 </div>
 
 
-
-<!-- SHOP -->
+<!-- ================= SHOP ================= -->
 
 <section id="shop">
 
@@ -281,50 +244,56 @@ textarea:focus{
 
 <h2>💎 UC buyurtma</h2>
 
-<label>
-UC miqdori
-</label>
+<label>UC paketi</label>
+
+<div id="ucGrid" class="uc-grid">
+
+<div class="loading">
+UC paketlari yuklanmoqda...
+</div>
+
+</div>
+
+<label>Tanlangan UC</label>
 
 <input
 id="uc"
 type="number"
 min="60"
 max="30000"
-placeholder="Masalan: 720"
-oninput="quote()"
+placeholder="Masalan: 60"
+oninput="selectByNumber()"
 >
 
 <div class="small">
-60–30 000 UC. Istalgan miqdorni kiriting.
+G2Bulk katalogidagi mavjud UC paketlari.
 </div>
-
 
 <div class="total">
-
 Jami:
-
-<span id="price">
-0
-</span>
-
+<span id="price">0</span>
 so‘m
-
 </div>
 
 
-<label>
-🆔 PUBG ID
-</label>
+<label>🆔 PUBG ID</label>
 
 <input
 id="pubg"
 placeholder="PUBG ID"
 >
 
+<button
+style="width:100%;margin-bottom:10px"
+onclick="checkPubgId()"
+>
+🔎 PUBG ID ni tekshirish
+</button>
 
-<label>
-📱 Telefon
-</label>
+<div id="playerMsg"></div>
+
+
+<label>📱 Telefon</label>
 
 <input
 id="phone"
@@ -332,30 +301,25 @@ placeholder="+998 XX XXX XX XX"
 >
 
 
-<label>
-💳 To‘lov
-</label>
+<label>💳 To‘lov usuli</label>
 
 <select id="payment">
 
-<option>Payme</option>
-
-<option>Uzcard</option>
-
-<option>Humo</option>
+<option value="Payme">Payme</option>
+<option value="Click">Click</option>
+<option value="Uzcard">Uzcard</option>
+<option value="Humo">Humo</option>
 
 </select>
 
 
 <button
-style="width:100%"
+id="orderButton"
+style="width:100%;margin-top:8px"
 onclick="order()"
 >
-
 🛒 Buyurtma berish
-
 </button>
-
 
 <div id="msg"></div>
 
@@ -364,19 +328,13 @@ onclick="order()"
 </section>
 
 
+<!-- ================= HISTORY ================= -->
 
-<!-- HISTORY -->
-
-<section
-id="history"
-class="hidden"
->
+<section id="history" class="hidden">
 
 <div class="form">
 
-<h2>
-📋 Buyurtmalarim
-</h2>
+<h2>📋 Buyurtmalarim</h2>
 
 <input
 id="hphone"
@@ -389,32 +347,23 @@ Ko‘rish
 
 </div>
 
-
 <div id="list"></div>
 
 </section>
 
 
+<!-- ================= COMPLAINT ================= -->
 
-<!-- COMPLAINT -->
-
-<section
-id="complaint"
-class="hidden"
->
+<section id="complaint" class="hidden">
 
 <div class="form">
 
-<h2>
-📝 Shikoyat / murojaat
-</h2>
-
+<h2>📝 Shikoyat / murojaat</h2>
 
 <input
 id="cphone"
 placeholder="Telefon"
 >
-
 
 <textarea
 id="ctext"
@@ -422,16 +371,12 @@ rows="6"
 placeholder="Murojaatingiz..."
 ></textarea>
 
-
 <button
 style="width:100%"
 onclick="complaint()"
 >
-
 Yuborish
-
 </button>
-
 
 <div id="cmsg"></div>
 
@@ -440,107 +385,58 @@ Yuborish
 </section>
 
 
-
 <div class="author">
-
 Muallif: khayitovEldor
-
 </div>
 
-
 </div>
-
 
 
 <script>
 
 /* =====================================
-   UC NARXLARI
+   API
 ===================================== */
-
-const prices = [
-
-[60,11500],
-
-[120,23000],
-
-[180,34500],
-
-[240,46000],
-
-[300,57500],
-
-[360,69000],
-
-[420,80500],
-
-[480,92000],
-
-[540,103500],
-
-[600,115000],
-
-[660,117000],
-
-[720,126000],
-
-[840,147000],
-
-[960,223500],
-
-[1080,251500],
-
-[1200,279500],
-
-[1500,346000],
-
-[1800,392500],
-
-[2000,439000],
-
-[2500,545500],
-
-[3000,651500],
-
-[4000,864500],
-
-[5000,1064000],
-
-[6000,1263500],
-
-[8000,1662500],
-
-[10000,2061500],
-
-[15000,3059000],
-
-[20000,4056500],
-
-[25000,5054000],
-
-[30000,6051500]
-
-];
-
-
-
-/* =====================================
-   SERVER
-===================================== */
-
-/*
-   Agar backend boshqa manzilda bo‘lsa,
-   shu yerga backend URL yoziladi.
-
-   Masalan:
-
-   const API =
-   "https://sizning-backend-saytingiz.com";
-
-*/
 
 const API = "";
 
+
+/* =====================================
+   UC SERVIS SOTUV NARXLARI
+===================================== */
+
+const sellPrices = {
+
+  60: 12000,
+
+  325: 65000,
+
+  660: 125000,
+
+  985: 190000,
+
+  1320: 250000,
+
+  1800: 330000,
+
+  2460: 450000,
+
+  3850: 690000,
+
+  5650: 950000,
+
+  8100: 1400000,
+
+  11950: 1950000,
+
+  16200: 2600000
+
+};
+
+
+let offers = [];
+let selectedOffer = null;
+let playerValidated = false;
 
 
 /* =====================================
@@ -555,546 +451,109 @@ function money(number){
 }
 
 
-
 /* =====================================
-   UC NARXINI HISOBLASH
-===================================== */
-
-function localQuote(q){
-
-  if(q < 60 || q > 30000){
-
-    return null;
-
-  }
-
-
-  for(let i = 0; i < prices.length - 1; i++){
-
-    if(q === prices[i][0]){
-
-      return prices[i][1];
-
-    }
-
-
-    if(
-      q > prices[i][0] &&
-      q < prices[i + 1][0]
-    ){
-
-      return Math.round(
-
-        prices[i][1]
-
-        +
-
-        (q - prices[i][0])
-
-        *
-
-        (
-
-          prices[i + 1][1]
-          -
-          prices[i][1]
-
-        )
-
-        /
-
-        (
-
-          prices[i + 1][0]
-          -
-          prices[i][0]
-
-        )
-
-      );
-
-    }
-
-  }
-
-
-  return prices[prices.length - 1][1];
-
-}
-
-
-
-/* =====================================
-   NARXNI KO‘RSATISH
-===================================== */
-
-function quote(){
-
-  const q =
-    Number(
-      document.getElementById("uc").value
-    ) || 0;
-
-
-  const p =
-    localQuote(q);
-
-
-  document.getElementById("price")
-    .textContent =
-    p
-      ? money(p)
-      : "0";
-
-}
-
-
-
-/* =====================================
-   API
+   API REQUEST
 ===================================== */
 
 async function api(url, options = {}){
 
-  const response =
-    await fetch(
-      API + url,
-      {
+  const response = await fetch(
+    API + url,
+    {
+      ...options,
 
-        ...options,
-
-        headers:{
-
-          "Content-Type":
-            "application/json",
-
-          ...(options.headers || {})
-
-        }
-
+      headers:{
+        "Content-Type":"application/json",
+        ...(options.headers || {})
       }
-    );
+    }
+  );
 
-
-  const data =
-    await response.json();
-
+  const data = await response.json();
 
   if(!response.ok){
 
     throw new Error(
       data.error ||
-      "Xatolik yuz berdi"
+      "Server xatosi"
     );
 
   }
-
 
   return data;
 
 }
 
 
-
 /* =====================================
-   BUYURTMA
+   UC KATALOGINI YUKLASH
 ===================================== */
 
-async function order(){
+async function loadOffers(){
 
-  const q =
-    Number(
-      document.getElementById("uc").value
-    ) || 0;
-
-
-  const pubgId =
-    document
-      .getElementById("pubg")
-      .value
-      .trim();
-
-
-  const phone =
-    document
-      .getElementById("phone")
-      .value
-      .trim();
-
-
-  const payment =
-    document
-      .getElementById("payment")
-      .value;
-
-
-  if(!localQuote(q)){
-
-    show(
-
-      "msg",
-
-      "UC miqdori 60–30 000 oralig‘ida bo‘lishi kerak.",
-
-      true
-
-    );
-
-    return;
-
-  }
-
-
-  if(!pubgId){
-
-    show(
-      "msg",
-      "PUBG ID kiriting.",
-      true
-    );
-
-    return;
-
-  }
-
-
-  if(!phone){
-
-    show(
-      "msg",
-      "Telefon raqam kiriting.",
-      true
-    );
-
-    return;
-
-  }
-
+  const grid =
+    document.getElementById("ucGrid");
 
   try{
 
     const data =
-      await api(
+      await api("/api/pubg/offers");
 
-        "/api/orders",
+    offers =
+      Array.isArray(data.offers)
+        ? data.offers
+        : [];
 
-        {
+    /*
+      Agar G2Bulk katalogi hali javob bermasa,
+      UC SERVIS belgilangan narxlarini ishlatamiz.
+    */
 
-          method:"POST",
+    if(offers.length === 0){
 
-          body:JSON.stringify({
-
-            uc:q,
-
-            pubgId:pubgId,
-
-            phone:phone,
-
-            payment:payment
-
-          })
-
-        }
-
-      );
-
-
-    show(
-
-      "msg",
-
-      "✅ Buyurtma qabul qilindi. Buyurtma № " +
-
-      data.orderId
-
-    );
-
-
-  }
-
-  catch(error){
-
-    show(
-      "msg",
-      error.message,
-      true
-    );
-
-  }
-
-}
-
-
-
-/* =====================================
-   BUYURTMALAR TARIXI
-===================================== */
-
-async function historyLoad(){
-
-  const phone =
-    document
-      .getElementById("hphone")
-      .value
-      .trim();
-
-
-  if(!phone){
-
-    document.getElementById("list")
-      .textContent =
-      "Telefon raqamingizni kiriting.";
-
-    return;
-
-  }
-
-
-  try{
-
-    const data =
-      await api(
-
-        "/api/orders?phone=" +
-        encodeURIComponent(phone)
-
-      );
-
-
-    const list =
-      document.getElementById("list");
-
-
-    if(
-      !data.orders ||
-      data.orders.length === 0
-    ){
-
-      list.innerHTML =
-        `<div class="card">
-          Buyurtma topilmadi.
-        </div>`;
-
-      return;
+      offers =
+        Object.keys(sellPrices)
+        .map(uc => ({
+          id:null,
+          name:uc + " UC",
+          price:sellPrices[uc]
+        }));
 
     }
 
-
-    list.innerHTML =
-      data.orders
-        .slice()
-        .reverse()
-        .map(
-
-          order => `
-
-          <div class="history">
-
-            <b>
-              Buyurtma #${order.id}
-            </b>
-
-            <p>
-              💎 ${Number(order.uc).toLocaleString()}
-              UC
-            </p>
-
-            <p>
-              💰 ${money(order.price)}
-              so‘m
-            </p>
-
-            <p>
-              🧾 ${order.status}
-            </p>
-
-            <p class="small">
-              ${order.createdAt}
-            </p>
-
-          </div>
-
-          `
-
-        )
-        .join("");
-
+    renderOffers();
 
   }
 
   catch(error){
 
-    document.getElementById("list")
-      .textContent =
-      error.message;
+    console.error(error);
+
+    /*
+      Backend katalogi ishlamasa ham
+      mijozga UC paketlari ko‘rinadi.
+    */
+
+    offers =
+      Object.keys(sellPrices)
+      .map(uc => ({
+        id:null,
+        name:uc + " UC",
+        price:sellPrices[uc]
+      }));
+
+    renderOffers();
 
   }
 
 }
 
 
-
 /* =====================================
-   MUROJAAT
+   UC KATALOGINI CHIQARISH
 ===================================== */
 
-async function complaint(){
+function renderOffers(){
 
-  const phone =
-    document
-      .getElementById("cphone")
-      .value
-      .trim();
-
-
-  const text =
-    document
-      .getElementById("ctext")
-      .value
-      .trim();
-
-
-  if(!phone || !text){
-
-    show(
-
-      "cmsg",
-
-      "Telefon va murojaatni kiriting.",
-
-      true
-
-    );
-
-    return;
-
-  }
-
-
-  try{
-
-    await api(
-
-      "/api/complaints",
-
-      {
-
-        method:"POST",
-
-        body:JSON.stringify({
-
-          phone:phone,
-
-          text:text
-
-        })
-
-      }
-
-    );
-
-
-    show(
-      "cmsg",
-      "✅ Murojaat yuborildi."
-    );
-
-
-    document
-      .getElementById("ctext")
-      .value = "";
-
-
-  }
-
-  catch(error){
-
-    show(
-      "cmsg",
-      error.message,
-      true
-    );
-
-  }
-
-}
-
-
-
-/* =====================================
-   XABAR
-===================================== */
-
-function show(
-  id,
-  text,
-  error = false
-){
-
-  const element =
-    document.getElementById(id);
-
-
-  element.className =
-    error
-      ? "err"
-      : "ok";
-
-
-  element.textContent =
-    text;
-
-}
-
-
-
-/* =====================================
-   SAHIFA ALMASHTIRISH
-===================================== */
-
-function page(id){
-
-  const pages = [
-
-    "shop",
-
-    "history",
-
-    "complaint"
-
-  ];
-
-
-  pages.forEach(
-
-    name => {
-
-      document
-        .getElementById(name)
-        .classList
-        .add("hidden");
-
-    }
-
-  );
-
-
-  document
-    .getElementById(id)
-    .classList
-    .remove("hidden");
-
-}
-
-
-
-/* =====================================
-   BOSHLANG‘ICH SAHIFA
-===================================== */
-
-page("shop");
-
-</script>
-
-</body>
-</html>
+  const grid =
+    document.getElementById("uc
