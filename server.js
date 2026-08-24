@@ -1,11 +1,9 @@
 const express = require("express");
 const path = require("path");
-const crypto = require("crypto");
 
 const app = express();
 
 const PORT = process.env.PORT || 3000;
-
 const G2BULK_API_KEY = process.env.G2BULK_API_KEY;
 const G2BULK_API = "https://api.g2bulk.com/v1";
 
@@ -15,11 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(__dirname));
 
 
-// ==================================================
-// G2BULK REQUEST
-// ==================================================
+// ================================
+// G2BULK API REQUEST
+// ================================
 
-async function g2Request(endpoint, options = {}) {
+async function g2bulk(endpoint, options = {}) {
 
   if (!G2BULK_API_KEY) {
     throw new Error(
@@ -28,10 +26,9 @@ async function g2Request(endpoint, options = {}) {
   }
 
   const response = await fetch(
-    `${G2BULK_API}${endpoint}`,
+    G2BULK_API + endpoint,
     {
       ...options,
-
       headers: {
         "X-API-Key": G2BULK_API_KEY,
         "Content-Type": "application/json",
@@ -46,10 +43,9 @@ async function g2Request(endpoint, options = {}) {
 
   try {
     data = JSON.parse(text);
-  } catch {
+  } catch (e) {
     data = {
-      success: false,
-      error: text || "Noma'lum javob"
+      error: text
     };
   }
 
@@ -57,15 +53,7 @@ async function g2Request(endpoint, options = {}) {
     throw new Error(
       data.message ||
       data.error ||
-      `G2Bulk HTTP ${response.status}`
-    );
-  }
-
-  if (data.success === false) {
-    throw new Error(
-      data.message ||
-      data.error ||
-      "G2Bulk xatosi"
+      "G2Bulk API xatosi: HTTP " + response.status
     );
   }
 
@@ -73,48 +61,46 @@ async function g2Request(endpoint, options = {}) {
 }
 
 
-// ==================================================
+// ================================
 // HOME
-// ==================================================
+// ================================
 
-app.get("/", (req, res) => {
+app.get("/", function (req, res) {
+
   res.sendFile(
     path.join(__dirname, "index.html")
   );
+
 });
 
 
-// ==================================================
+// ================================
 // ADMIN
-// ==================================================
+// ================================
 
-app.get("/admin", (req, res) => {
+app.get("/admin", function (req, res) {
+
   res.sendFile(
     path.join(__dirname, "admin.html")
   );
+
 });
 
 
-// ==================================================
-// API STATUS
-// ==================================================
+// ================================
+// STATUS
+// ================================
 
-app.get("/api/status", async (req, res) => {
+app.get("/api/status", async function (req, res) {
 
   try {
 
-    const data =
-      await g2Request("/getMe");
+    const data = await g2bulk("/getMe");
 
     res.json({
       ok: true,
       message: "UC SERVIS + G2Bulk API ishlayapti",
-      account: {
-        user_id: data.user_id,
-        username: data.username,
-        first_name: data.first_name,
-        balance: data.balance
-      }
+      account: data
     });
 
   } catch (error) {
@@ -129,21 +115,20 @@ app.get("/api/status", async (req, res) => {
 });
 
 
-// ==================================================
-// G2BULK BALANCE
-// ==================================================
+// ================================
+// BALANCE
+// ================================
 
-app.get("/api/balance", async (req, res) => {
+app.get("/api/balance", async function (req, res) {
 
   try {
 
-    const data =
-      await g2Request("/getMe");
+    const data = await g2bulk("/getMe");
 
     res.json({
       ok: true,
-      balance: data.balance,
-      currency: "USD"
+      balance: data.balance || 0,
+      account: data
     });
 
   } catch (error) {
@@ -158,33 +143,19 @@ app.get("/api/balance", async (req, res) => {
 });
 
 
-// ==================================================
-// PUBG GAMES
-// ==================================================
+// ================================
+// GAMES
+// ================================
 
-app.get("/api/pubg/games", async (req, res) => {
+app.get("/api/games", async function (req, res) {
 
   try {
 
-    const data =
-      await g2Request("/games");
-
-    const games =
-      Array.isArray(data.games)
-        ? data.games
-        : [];
-
-    const pubg =
-      games.find(game =>
-        String(game.code)
-          .toLowerCase()
-          .includes("pubg")
-      );
+    const data = await g2bulk("/games");
 
     res.json({
       ok: true,
-      pubg: pubg || null,
-      games
+      games: data.games || data
     });
 
   } catch (error) {
@@ -199,38 +170,137 @@ app.get("/api/pubg/games", async (req, res) => {
 });
 
 
-// ==================================================
+// ================================
 // PUBG CATALOG
-// ==================================================
+// ================================
 
-app.get("/api/pubg/offers", async (req, res) => {
+app.get("/api/pubg/offers", async function (req, res) {
 
   try {
 
-    /*
-      G2Bulk hujjatida PUBG Mobile uchun
-      catalogue game code sifatida pubgm ko'rsatilgan.
-    */
+    const data = await g2bulk(
+      "/games/pubgm/catalogue"
+    );
 
-    const data =
-      await g2Request(
-        "/games/pubgm/catalogue",
-        {
-          method: "GET"
-        }
-      );
-
-    const catalogues =
-      Array.isArray(data.catalogues)
-        ? data.catalogues
-        : [];
+    const offers =
+      data.catalogues ||
+      data.offers ||
+      data.products ||
+      [];
 
     res.json({
       ok: true,
-      game: data.game || null,
-      offers: catalogues
+      offers: offers
     });
 
   } catch (error) {
 
-    res.status(
+    res.status(500).json({
+      ok: false,
+      error: error.message
+    });
+
+  }
+
+});
+
+
+// ================================
+// PUBG ID VALIDATION
+// ================================
+
+app.post("/api/pubg/validate", async function (req, res) {
+
+  try {
+
+    const playerId =
+      String(req.body.player_id || "").trim();
+
+    if (!playerId) {
+
+      return res.status(400).json({
+        ok: false,
+        error: "PUBG ID kiriting."
+      });
+
+    }
+
+    const data = await g2bulk(
+      "/games/checkPlayerId",
+      {
+        method: "POST",
+
+        body: JSON.stringify({
+          game: "pubgm",
+          user_id: playerId
+        })
+      }
+    );
+
+    res.json({
+      ok: true,
+      valid: data.valid !== false,
+      player_name:
+        data.name ||
+        data.player_name ||
+        null,
+      data: data
+    });
+
+  } catch (error) {
+
+    res.status(400).json({
+      ok: false,
+      error: error.message
+    });
+
+  }
+
+});
+
+
+// ================================
+// TEST ORDER
+// ================================
+
+app.post("/api/order", async function (req, res) {
+
+  return res.status(403).json({
+    ok: false,
+    error:
+      "Real UC buyurtmasi hozircha o'chirilgan. Avval G2Bulk API katalogi va to'lov tizimini tekshiramiz."
+  });
+
+});
+
+
+// ================================
+// HEALTH CHECK
+// ================================
+
+app.get("/health", function (req, res) {
+
+  res.json({
+    ok: true,
+    service: "UC SERVIS",
+    server: "online"
+  });
+
+});
+
+
+// ================================
+// SERVER
+// ================================
+
+app.listen(
+  PORT,
+  "0.0.0.0",
+  function () {
+
+    console.log(
+      "UC SERVIS server ishga tushdi: " + PORT
+    );
+
+  }
+);
