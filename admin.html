@@ -452,3 +452,474 @@ async function api(
 
 
   let data =
+  try{
+
+    data = await response.json();
+
+  }catch(error){
+
+    throw new Error(
+      "Serverdan noto‘g‘ri javob keldi."
+    );
+
+  }
+
+
+  if(!response.ok){
+
+    throw new Error(
+      data.error ||
+      "Xatolik yuz berdi."
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+
+/* =====================================
+   LOGIN TEKSHIRISH
+===================================== */
+
+async function checkLogin(){
+
+  const password =
+    localStorage.getItem(
+      "uc_admin_password"
+    );
+
+
+  if(!password){
+
+    return;
+
+  }
+
+
+  try{
+
+    await api("/api/admin/orders");
+
+
+    document
+      .getElementById("login")
+      .classList
+      .add("hidden");
+
+    document
+      .getElementById("admin")
+      .classList
+      .remove("hidden");
+
+    loadOrders();
+
+  }catch(error){
+
+    localStorage.removeItem(
+      "uc_admin_password"
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   BUYURTMALARNI YUKLASH
+===================================== */
+
+async function loadOrders(){
+
+  show(
+    "ordersMsg",
+    "Buyurtmalar yuklanmoqda..."
+  );
+
+
+  try{
+
+    const data =
+      await api(
+        "/api/admin/orders"
+      );
+
+
+    const list =
+      document.getElementById(
+        "ordersList"
+      );
+
+
+    if(
+      !data.orders ||
+      data.orders.length === 0
+    ){
+
+      list.innerHTML = `
+        <div class="card">
+          Buyurtmalar yo‘q.
+        </div>
+      `;
+
+      show(
+        "ordersMsg",
+        "Buyurtmalar topilmadi."
+      );
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      data.orders
+        .slice()
+        .reverse()
+        .map(order => `
+
+          <div class="order">
+
+            <h3>
+              📦 Buyurtma #${order.id}
+            </h3>
+
+            <p>
+              🆔 PUBG ID:
+              <b>${order.player_id || "-"}</b>
+            </p>
+
+            <p>
+              💎 UC:
+              <b>
+                ${Number(order.uc || 0).toLocaleString()}
+              </b>
+            </p>
+
+            <p>
+              💰 Narx:
+              <span class="total">
+                ${Number(order.price || 0).toLocaleString()}
+                so‘m
+              </span>
+            </p>
+
+            <p>
+              📱 Telefon:
+              ${order.phone || "-"}
+            </p>
+
+            <p>
+              💳 To‘lov:
+              ${order.payment || "-"}
+            </p>
+
+            <p>
+              📌 Holat:
+              <span class="status">
+                ${order.status || "Pending"}
+              </span>
+            </p>
+
+            <p class="small">
+              ${order.createdAt || ""}
+            </p>
+
+            <div class="row">
+
+              <button
+                class="green"
+                onclick="updateOrder(
+                  '${order.id}',
+                  'Completed'
+                )"
+              >
+                ✅ Bajarildi
+              </button>
+
+              <button
+                class="blue"
+                onclick="updateOrder(
+                  '${order.id}',
+                  'Processing'
+                )"
+              >
+                🔄 Jarayonda
+              </button>
+
+              <button
+                class="danger"
+                onclick="updateOrder(
+                  '${order.id}',
+                  'Cancelled'
+                )"
+              >
+                ❌ Bekor qilish
+              </button>
+
+            </div>
+
+          </div>
+
+        `)
+        .join("");
+
+
+    show(
+      "ordersMsg",
+      "✅ Buyurtmalar yangilandi."
+    );
+
+
+  }catch(error){
+
+    show(
+      "ordersMsg",
+      error.message,
+      true
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   BUYURTMA STATUSINI O‘ZGARTIRISH
+===================================== */
+
+async function updateOrder(
+  id,
+  status
+){
+
+  try{
+
+    await api(
+      "/api/admin/orders/" +
+      encodeURIComponent(id),
+      {
+
+        method:"PATCH",
+
+        body:
+          JSON.stringify({
+
+            status:status
+
+          })
+
+      }
+    );
+
+
+    loadOrders();
+
+
+  }catch(error){
+
+    show(
+      "ordersMsg",
+      error.message,
+      true
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   MUROJAATLARNI YUKLASH
+===================================== */
+
+async function loadComplaints(){
+
+  show(
+    "complaintsMsg",
+    "Murojaatlar yuklanmoqda..."
+  );
+
+
+  try{
+
+    const data =
+      await api(
+        "/api/admin/complaints"
+      );
+
+
+    const list =
+      document.getElementById(
+        "complaintsList"
+      );
+
+
+    if(
+      !data.complaints ||
+      data.complaints.length === 0
+    ){
+
+      list.innerHTML = `
+        <div class="card">
+          Murojaatlar yo‘q.
+        </div>
+      `;
+
+      show(
+        "complaintsMsg",
+        "Murojaatlar topilmadi."
+      );
+
+      return;
+
+    }
+
+
+    list.innerHTML =
+      data.complaints
+        .slice()
+        .reverse()
+        .map(item => `
+
+          <div class="complaint">
+
+            <h3>
+              📝 Murojaat #${item.id}
+            </h3>
+
+            <p>
+              📱 Telefon:
+              <b>
+                ${item.phone || "-"}
+              </b>
+            </p>
+
+            <p>
+              💬 Murojaat:
+            </p>
+
+            <p>
+              ${item.text || "-"}
+            </p>
+
+            <p class="small">
+              ${item.createdAt || ""}
+            </p>
+
+          </div>
+
+        `)
+        .join("");
+
+
+    show(
+      "complaintsMsg",
+      "✅ Murojaatlar yangilandi."
+    );
+
+
+  }catch(error){
+
+    show(
+      "complaintsMsg",
+      error.message,
+      true
+    );
+
+  }
+
+}
+
+
+
+/* =====================================
+   SAHIFA ALMASHTIRISH
+===================================== */
+
+function showPage(id){
+
+  document
+    .getElementById("orders")
+    .classList
+    .add("hidden");
+
+  document
+    .getElementById("complaints")
+    .classList
+    .add("hidden");
+
+
+  document
+    .getElementById(id)
+    .classList
+    .remove("hidden");
+
+
+  if(id === "orders"){
+
+    loadOrders();
+
+  }
+
+
+  if(id === "complaints"){
+
+    loadComplaints();
+
+  }
+
+}
+
+
+
+/* =====================================
+   XABAR
+===================================== */
+
+function show(
+  id,
+  text,
+  error = false
+){
+
+  const element =
+    document.getElementById(id);
+
+
+  if(!element){
+
+    return;
+
+  }
+
+
+  element.className =
+    error
+      ? "err"
+      : "ok";
+
+
+  element.textContent =
+    text;
+
+}
+
+
+
+/* =====================================
+   START
+===================================== */
+
+checkLogin();
+
+</script>
+
+</body>
+</html>
