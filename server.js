@@ -3,6 +3,7 @@ const path = require("path");
 const fs = require("fs");
 
 const app = express();
+
 const PORT = process.env.PORT || 3000;
 
 /*
@@ -17,9 +18,6 @@ const ADMIN_PASSWORD =
 const G2BULK_API_KEY =
     process.env.G2BULK_API_KEY || "";
 
-const G2BULK_BASE_URL =
-    process.env.G2BULK_BASE_URL ||
-    "https://api.g2bulk.com";
 
 /*
 ========================================
@@ -35,22 +33,41 @@ app.use(
     })
 );
 
+
 /*
 ========================================
-PUBLIC
+INDEX VA ADMIN FAYLLARI
+public PAPKA YO‘Q
 ========================================
 */
 
-const PUBLIC_DIR =
-    path.join(__dirname, "public");
+app.get("/admin", (req, res) => {
 
-app.use(
-    express.static(PUBLIC_DIR)
-);
+    res.sendFile(
+        path.join(
+            __dirname,
+            "admin.html"
+        )
+    );
+
+});
+
+
+app.get("/", (req, res) => {
+
+    res.sendFile(
+        path.join(
+            __dirname,
+            "index.html"
+        )
+    );
+
+});
+
 
 /*
 ========================================
-DATA
+DATA FAYL
 ========================================
 */
 
@@ -60,21 +77,31 @@ const DATA_FILE =
         "data.json"
     );
 
-function defaultData() {
+
+function defaultData(){
 
     return {
+
         orders: [],
+
         complaints: [],
+
         nextOrderId: 1
+
     };
 
 }
 
-function loadData() {
 
-    try {
+function loadData(){
 
-        if (!fs.existsSync(DATA_FILE)) {
+    try{
+
+        if(
+            !fs.existsSync(
+                DATA_FILE
+            )
+        ){
 
             const data =
                 defaultData();
@@ -82,7 +109,9 @@ function loadData() {
             saveData(data);
 
             return data;
+
         }
+
 
         const text =
             fs.readFileSync(
@@ -90,21 +119,38 @@ function loadData() {
                 "utf8"
             );
 
+
         const data =
             JSON.parse(text);
 
-        if (!Array.isArray(data.orders))
+
+        if(!Array.isArray(data.orders)){
+
             data.orders = [];
 
-        if (!Array.isArray(data.complaints))
+        }
+
+
+        if(!Array.isArray(data.complaints)){
+
             data.complaints = [];
 
-        if (!data.nextOrderId)
+        }
+
+
+        if(
+            !data.nextOrderId ||
+            Number(data.nextOrderId) < 1
+        ){
+
             data.nextOrderId = 1;
+
+        }
+
 
         return data;
 
-    } catch (error) {
+    }catch(error){
 
         console.error(
             "DATA LOAD ERROR:",
@@ -117,7 +163,8 @@ function loadData() {
 
 }
 
-function saveData(data) {
+
+function saveData(data){
 
     fs.writeFileSync(
         DATA_FILE,
@@ -131,142 +178,82 @@ function saveData(data) {
 
 }
 
+
 let db = loadData();
+
 
 /*
 ========================================
-YORDAMCHI
+YORDAMCHI FUNKSIYALAR
 ========================================
 */
 
-function now() {
+function now(){
 
-    return new Date().toLocaleString(
-        "uz-UZ",
-        {
-            timeZone:
-                "Asia/Tashkent"
-        }
+    return new Date()
+        .toLocaleString(
+            "uz-UZ",
+            {
+                timeZone:
+                    "Asia/Tashkent"
+            }
+        );
+
+}
+
+
+function money(number){
+
+    return Number(
+        number || 0
     );
 
 }
 
-function number(value) {
-
-    return Number(value || 0);
-
-}
 
 /*
 ========================================
-ADMIN AUTH
+ADMIN TEKSHIRISH
 ========================================
 */
 
-function adminAuth(req, res, next) {
+function adminAuth(
+    req,
+    res,
+    next
+){
 
     const password =
         req.headers[
             "x-admin-password"
         ];
 
-    if (
+
+    if(
         !password ||
         password !== ADMIN_PASSWORD
-    ) {
+    ){
 
         return res
             .status(401)
             .json({
+
                 error:
                     "Admin parol noto‘g‘ri."
+
             });
 
     }
+
 
     next();
 
 }
 
-/*
-========================================
-G2BULK REQUEST
-========================================
-*/
-
-async function g2bulkRequest(
-    endpoint,
-    options = {}
-) {
-
-    if (!G2BULK_API_KEY) {
-
-        throw new Error(
-            "G2BULK_API_KEY Render Environment Variables'da topilmadi."
-        );
-
-    }
-
-    const response =
-        await fetch(
-            G2BULK_BASE_URL +
-            endpoint,
-            {
-
-                ...options,
-
-                headers: {
-
-                    "Content-Type":
-                        "application/json",
-
-                    "X-API-Key":
-                        G2BULK_API_KEY,
-
-                    ...(options.headers || {})
-
-                }
-
-            }
-        );
-
-    const text =
-        await response.text();
-
-    let data;
-
-    try {
-
-        data =
-            JSON.parse(text);
-
-    } catch {
-
-        data = {
-            raw: text
-        };
-
-    }
-
-    if (!response.ok) {
-
-        const message =
-            data?.error ||
-            data?.message ||
-            data?.raw ||
-            `G2BULK xatolik: ${response.status}`;
-
-        throw new Error(message);
-
-    }
-
-    return data;
-
-}
 
 /*
 ========================================
-HEALTH
+HEALTH CHECK
 ========================================
 */
 
@@ -279,10 +266,12 @@ app.get(
             ok: true,
 
             message:
-                "UC SERVIS + G2BULK API ishlayapti",
+                "UC SERVIS ishlayapti",
 
             g2bulk:
-                Boolean(G2BULK_API_KEY),
+                G2BULK_API_KEY
+                ? "API key mavjud"
+                : "API key mavjud emas",
 
             time:
                 now()
@@ -291,6 +280,7 @@ app.get(
 
     }
 );
+
 
 /*
 ========================================
@@ -307,10 +297,11 @@ app.post(
                 req.body.password || ""
             );
 
-        if (
+
+        if(
             password !==
             ADMIN_PASSWORD
-        ) {
+        ){
 
             return res
                 .status(401)
@@ -322,6 +313,7 @@ app.post(
                 });
 
         }
+
 
         res.json({
 
@@ -335,93 +327,6 @@ app.post(
     }
 );
 
-/*
-========================================
-G2BULK PUBG ID TEKSHIRISH
-========================================
-*/
-
-app.post(
-    "/api/pubg/validate",
-    async (req, res) => {
-
-        try {
-
-            const playerId =
-                String(
-                    req.body.player_id ||
-                    ""
-                ).trim();
-
-            if (!playerId) {
-
-                return res
-                    .status(400)
-                    .json({
-
-                        error:
-                            "PUBG ID kiritilmagan."
-
-                    });
-
-            }
-
-            const data =
-                await g2bulkRequest(
-                    "/games/pubg-mobile/checkPlayerId",
-                    {
-
-                        method: "POST",
-
-                        body:
-                            JSON.stringify({
-
-                                player_id:
-                                    playerId
-
-                            })
-
-                    }
-                );
-
-            res.json({
-
-                valid:
-                    data.valid !== false,
-
-                player_id:
-                    playerId,
-
-                player_name:
-                    data.player_name ||
-                    data.playerName ||
-                    null,
-
-                g2bulk:
-                    data
-
-            });
-
-        } catch (error) {
-
-            console.error(
-                "PUBG VALIDATE ERROR:",
-                error
-            );
-
-            res
-                .status(400)
-                .json({
-
-                    error:
-                        error.message
-
-                });
-
-        }
-
-    }
-);
 
 /*
 ========================================
@@ -433,17 +338,20 @@ app.post(
     "/api/order",
     async (req, res) => {
 
-        try {
+        try{
 
             const {
+
                 player_id,
                 uc,
                 price,
                 phone,
                 payment
+
             } = req.body;
 
-            if (!player_id) {
+
+            if(!player_id){
 
                 return res
                     .status(400)
@@ -456,7 +364,8 @@ app.post(
 
             }
 
-            if (!uc) {
+
+            if(!uc){
 
                 return res
                     .status(400)
@@ -469,7 +378,8 @@ app.post(
 
             }
 
-            if (!phone) {
+
+            if(!phone){
 
                 return res
                     .status(400)
@@ -482,7 +392,8 @@ app.post(
 
             }
 
-            if (!price) {
+
+            if(!price){
 
                 return res
                     .status(400)
@@ -495,58 +406,6 @@ app.post(
 
             }
 
-            let playerCheck;
-
-            try {
-
-                playerCheck =
-                    await g2bulkRequest(
-                        "/games/pubg-mobile/checkPlayerId",
-                        {
-
-                            method: "POST",
-
-                            body:
-                                JSON.stringify({
-
-                                    player_id:
-                                        String(
-                                            player_id
-                                        )
-
-                                })
-
-                        }
-                    );
-
-            } catch (error) {
-
-                return res
-                    .status(400)
-                    .json({
-
-                        error:
-                            "PUBG ID tekshirilmadi: " +
-                            error.message
-
-                    });
-
-            }
-
-            if (
-                playerCheck.valid === false
-            ) {
-
-                return res
-                    .status(400)
-                    .json({
-
-                        error:
-                            "PUBG ID noto‘g‘ri."
-
-                    });
-
-            }
 
             const order = {
 
@@ -563,7 +422,7 @@ app.post(
                     Number(uc),
 
                 price:
-                    number(price),
+                    money(price),
 
                 phone:
                     String(phone),
@@ -578,18 +437,18 @@ app.post(
                     "Kutilmoqda",
 
                 createdAt:
-                    now(),
-
-                player_name:
-                    playerCheck.player_name ||
-                    playerCheck.playerName ||
-                    null
+                    now()
 
             };
 
-            db.orders.push(order);
+
+            db.orders.push(
+                order
+            );
+
 
             saveData(db);
+
 
             res.json({
 
@@ -599,19 +458,18 @@ app.post(
                     order.id,
 
                 status:
-                    order.status,
-
-                player_name:
-                    order.player_name
+                    order.status
 
             });
 
-        } catch (error) {
+
+        }catch(error){
 
             console.error(
                 "UC ORDER ERROR:",
                 error
             );
+
 
             res
                 .status(500)
@@ -626,9 +484,110 @@ app.post(
 
     }
 );
+
+
 /*
 ========================================
-G2BULK BUYURTMA
+G2BULK PUBG ID TEKSHIRISH
+========================================
+*/
+
+app.post(
+    "/api/pubg/validate",
+    async (req, res) => {
+
+        try{
+
+            const playerId =
+                String(
+                    req.body.player_id ||
+                    ""
+                ).trim();
+
+
+            if(!playerId){
+
+                return res
+                    .status(400)
+                    .json({
+
+                        error:
+                            "PUBG ID kiritilmagan."
+
+                    });
+
+            }
+
+
+            /*
+            =================================
+            G2BULK API
+            =================================
+
+            G2BULK API key Render
+            Environment Variables orqali
+            olinadi.
+
+            Hozir player ID formatini
+            tekshirish qilinmoqda.
+            */
+
+
+            if(
+                !/^\d+$/.test(playerId)
+            ){
+
+                return res.json({
+
+                    valid: false,
+
+                    player_id:
+                        playerId
+
+                });
+
+            }
+
+
+            res.json({
+
+                valid: true,
+
+                player_id:
+                    playerId,
+
+                player_name:
+                    null
+
+            });
+
+
+        }catch(error){
+
+            console.error(
+                "PUBG VALIDATE ERROR:",
+                error
+            );
+
+
+            res
+                .status(500)
+                .json({
+
+                    error:
+                        "PUBG ID tekshirishda xatolik."
+
+                });
+
+        }
+
+    }
+);
+
+
+/*
+========================================
+G2BULK BUYURTMASI
 ========================================
 */
 
@@ -636,136 +595,89 @@ app.post(
     "/api/g2bulk/order",
     async (req, res) => {
 
-        try {
+        try{
 
             const {
+
                 player_id,
                 product_id,
                 product_name,
                 price,
                 phone,
                 payment
+
             } = req.body;
 
-            if (!player_id) {
+
+            if(!player_id){
 
                 return res
                     .status(400)
                     .json({
+
                         error:
                             "PUBG ID kiritilmagan."
+
                     });
 
             }
 
-            if (!product_id) {
+
+            if(!product_id){
 
                 return res
                     .status(400)
                     .json({
+
                         error:
                             "Mahsulot tanlanmagan."
+
                     });
 
             }
 
-            if (!product_name) {
+
+            if(!product_name){
 
                 return res
                     .status(400)
                     .json({
+
                         error:
                             "Mahsulot nomi kiritilmagan."
+
                     });
 
             }
 
-            if (!price) {
+
+            if(!price){
 
                 return res
                     .status(400)
                     .json({
+
                         error:
                             "Mahsulot narxi aniqlanmadi."
+
                     });
 
             }
 
-            if (!phone) {
+
+            if(!phone){
 
                 return res
                     .status(400)
                     .json({
+
                         error:
                             "Telefon raqami kiritilmagan."
-                    });
-
-            }
-
-            /*
-            ================================
-            PUBG ID TEKSHIRISH
-            ================================
-            */
-
-            let playerCheck;
-
-            try {
-
-                playerCheck =
-                    await g2bulkRequest(
-                        "/games/pubg-mobile/checkPlayerId",
-                        {
-
-                            method: "POST",
-
-                            body:
-                                JSON.stringify({
-
-                                    player_id:
-                                        String(
-                                            player_id
-                                        )
-
-                                })
-
-                        }
-                    );
-
-            } catch (error) {
-
-                return res
-                    .status(400)
-                    .json({
-
-                        error:
-                            "PUBG ID tekshirilmadi: " +
-                            error.message
 
                     });
 
             }
 
-            if (
-                playerCheck.valid === false
-            ) {
-
-                return res
-                    .status(400)
-                    .json({
-
-                        error:
-                            "PUBG ID noto‘g‘ri."
-
-                    });
-
-            }
-
-            /*
-            ================================
-            BUYURTMA SAQLASH
-            ================================
-            */
 
             const order = {
 
@@ -785,7 +697,7 @@ app.post(
                     String(product_name),
 
                 price:
-                    number(price),
+                    money(price),
 
                 phone:
                     String(phone),
@@ -800,18 +712,18 @@ app.post(
                     "Kutilmoqda",
 
                 createdAt:
-                    now(),
-
-                player_name:
-                    playerCheck.player_name ||
-                    playerCheck.playerName ||
-                    null
+                    now()
 
             };
 
-            db.orders.push(order);
+
+            db.orders.push(
+                order
+            );
+
 
             saveData(db);
+
 
             res.json({
 
@@ -821,19 +733,18 @@ app.post(
                     order.id,
 
                 status:
-                    order.status,
-
-                player_name:
-                    order.player_name
+                    order.status
 
             });
 
-        } catch (error) {
+
+        }catch(error){
 
             console.error(
                 "G2BULK ORDER ERROR:",
                 error
             );
+
 
             res
                 .status(500)
@@ -848,8 +759,6 @@ app.post(
 
     }
 );
-
-
 /*
 ========================================
 MIJOZ BUYURTMALARINI KO‘RISH
@@ -862,11 +771,11 @@ app.get(
 
         const phone =
             String(
-                req.query.phone ||
-                ""
+                req.query.phone || ""
             ).trim();
 
-        if (!phone) {
+
+        if(!phone){
 
             return res
                 .status(400)
@@ -879,6 +788,7 @@ app.get(
 
         }
 
+
         const orders =
             db.orders.filter(
                 order =>
@@ -886,6 +796,7 @@ app.get(
                         order.phone
                     ) === phone
             );
+
 
         res.json({
 
@@ -907,14 +818,15 @@ app.post(
     "/api/complaints",
     (req, res) => {
 
-        try {
+        try{
 
             const {
                 phone,
                 text
             } = req.body;
 
-            if (!phone) {
+
+            if(!phone){
 
                 return res
                     .status(400)
@@ -927,7 +839,8 @@ app.post(
 
             }
 
-            if (!text) {
+
+            if(!text){
 
                 return res
                     .status(400)
@@ -939,6 +852,7 @@ app.post(
                     });
 
             }
+
 
             const complaint = {
 
@@ -959,11 +873,14 @@ app.post(
 
             };
 
+
             db.complaints.push(
                 complaint
             );
 
+
             saveData(db);
+
 
             res.json({
 
@@ -974,12 +891,14 @@ app.post(
 
             });
 
-        } catch (error) {
+
+        }catch(error){
 
             console.error(
                 "COMPLAINT ERROR:",
                 error
             );
+
 
             res
                 .status(500)
@@ -1046,7 +965,7 @@ app.get(
 
 /*
 ========================================
-ADMIN — BUYURTMA STATUSI
+ADMIN — BUYURTMA STATUSINI O‘ZGARTIRISH
 ========================================
 */
 
@@ -1060,13 +979,15 @@ app.patch(
                 req.params.id
             );
 
+
         const order =
             db.orders.find(
                 item =>
                     Number(item.id) === id
             );
 
-        if (!order) {
+
+        if(!order){
 
             return res
                 .status(404)
@@ -1079,13 +1000,14 @@ app.patch(
 
         }
 
+
         const status =
             String(
-                req.body.status ||
-                ""
+                req.body.status || ""
             ).trim();
 
-        if (!status) {
+
+        if(!status){
 
             return res
                 .status(400)
@@ -1098,13 +1020,17 @@ app.patch(
 
         }
 
+
         order.status =
             status;
+
 
         order.updatedAt =
             now();
 
+
         saveData(db);
+
 
         res.json({
 
@@ -1120,7 +1046,7 @@ app.patch(
 
 /*
 ========================================
-ADMIN — MUROJAAT STATUSI
+ADMIN — MUROJAAT STATUSINI O‘ZGARTIRISH
 ========================================
 */
 
@@ -1134,13 +1060,15 @@ app.patch(
                 req.params.id
             );
 
+
         const complaint =
             db.complaints.find(
                 item =>
                     Number(item.id) === id
             );
 
-        if (!complaint) {
+
+        if(!complaint){
 
             return res
                 .status(404)
@@ -1153,13 +1081,14 @@ app.patch(
 
         }
 
+
         const status =
             String(
-                req.body.status ||
-                ""
+                req.body.status || ""
             ).trim();
 
-        if (!status) {
+
+        if(!status){
 
             return res
                 .status(400)
@@ -1172,13 +1101,17 @@ app.patch(
 
         }
 
+
         complaint.status =
             status;
+
 
         complaint.updatedAt =
             now();
 
+
         saveData(db);
+
 
         res.json({
 
@@ -1206,8 +1139,10 @@ app.get(
         const totalOrders =
             db.orders.length;
 
+
         const totalComplaints =
             db.complaints.length;
+
 
         const completedOrders =
             db.orders.filter(
@@ -1215,6 +1150,7 @@ app.get(
                     order.status ===
                     "Tugallandi"
             ).length;
+
 
         const totalRevenue =
             db.orders.reduce(
@@ -1225,6 +1161,7 @@ app.get(
                     ),
                 0
             );
+
 
         res.json({
 
@@ -1244,20 +1181,22 @@ app.get(
 
 /*
 ========================================
-ADMIN HTML
+NOMA'LUM API YO‘LLARI
 ========================================
 */
 
-app.get(
-    "/admin",
+app.use(
+    "/api",
     (req, res) => {
 
-        res.sendFile(
-            path.join(
-                PUBLIC_DIR,
-                "admin.html"
-            )
-        );
+        res
+            .status(404)
+            .json({
+
+                error:
+                    "API manzili topilmadi."
+
+            });
 
     }
 );
@@ -1265,54 +1204,16 @@ app.get(
 
 /*
 ========================================
-INDEX HTML
-========================================
-*/
-
-app.get(
-    "/",
-    (req, res) => {
-
-        res.sendFile(
-            path.join(
-                PUBLIC_DIR,
-                "index.html"
-            )
-        );
-
-    }
-);
-
-
-/*
-========================================
-API 404
+NOMA'LUM SAHIFALAR
 ========================================
 */
 
 app.use(
     (req, res) => {
 
-        if (
-            req.path.startsWith(
-                "/api/"
-            )
-        ) {
-
-            return res
-                .status(404)
-                .json({
-
-                    error:
-                        "API endpoint topilmadi."
-
-                });
-
-        }
-
         res.sendFile(
             path.join(
-                PUBLIC_DIR,
+                __dirname,
                 "index.html"
             )
         );
@@ -1338,8 +1239,8 @@ app.listen(
         console.log(
             "G2BULK API:",
             G2BULK_API_KEY
-                ? "ULANGAN"
-                : "API KEY YO‘Q"
+                ? "API KEY mavjud"
+                : "API KEY mavjud emas"
         );
 
     }
