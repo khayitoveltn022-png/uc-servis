@@ -2,558 +2,151 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>UC SERVIS</title>
 
 <style>
-*{
-  box-sizing:border-box;
+
+* {
+    box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  background:#080b10;
-  color:#fff;
-  font-family:Arial,sans-serif;
+body {
+    margin: 0;
+    background: #080b10;
+    color: #ffffff;
+    font-family: Arial, sans-serif;
 }
 
-header{
-  padding:22px 15px;
-  text-align:center;
-  background:#111722;
-  border-bottom:1px solid #293140;
+header {
+    padding: 22px 15px;
+    text-align: center;
+    background: #111722;
+    border-bottom: 1px solid #293140;
 }
 
-header h1{
-  margin:0;
-  font-size:30px;
+header h1 {
+    margin: 0;
+    font-size: 30px;
+    color: #ffffff;
 }
 
-header p{
-  color:#aeb6c3;
-  margin:8px 0;
+header p {
+    color: #b8c0cc;
+    margin: 8px 0 0;
 }
 
-.container{
-  max-width:800px;
-  margin:auto;
-  padding:18px;
+.container {
+    max-width: 800px;
+    margin: auto;
+    padding: 18px;
 }
 
-.nav{
-  display:flex;
-  gap:8px;
-  margin:20px 0;
+.nav {
+    display: flex;
+    gap: 8px;
+    margin: 20px 0;
 }
 
-.nav button{
-  flex:1;
+.nav button {
+    flex: 1;
 }
 
-button{
-  border:0;
-  border-radius:10px;
-  padding:12px 16px;
-  background:#f5b400;
-  color:#111;
-  font-weight:bold;
-  cursor:pointer;
+button {
+    border: 0;
+    border-radius: 10px;
+    padding: 13px 16px;
+    background: #f5b400;
+    color: #111111;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-button:hover{
-  opacity:.9;
-}
-
-button:disabled{
-  opacity:.5;
-  cursor:not-allowed;
+button:hover {
+    opacity: .9;
 }
 
 .card,
-.form{
-  background:#151b25;
-  border:1px solid #293342;
-  border-radius:16px;
-  padding:18px;
-  margin:12px 0;
+.form {
+    background: #151b25;
+    border: 1px solid #293342;
+    border-radius: 16px;
+    padding: 18px;
+    margin: 12px 0;
 }
 
-label{
-  display:block;
-  margin-top:8px;
-  font-weight:bold;
+h2 {
+    color: #ffffff;
+}
+
+label {
+    display: block;
+    margin-top: 10px;
+    color: #ffffff;
+    font-weight: bold;
 }
 
 input,
 select,
-textarea{
-  width:100%;
-  padding:13px;
-  margin:7px 0 13px;
-  border-radius:9px;
-  border:1px solid #303a4a;
-  background:#0d1219;
-  color:white;
-  outline:none;
+textarea {
+    width: 100%;
+    padding: 14px;
+    margin: 7px 0 13px;
+    border-radius: 9px;
+    border: 1px solid #303a4a;
+    background: #0d1219;
+    color: #ffffff;
+    outline: none;
+    font-size: 16px;
+}
+
+input::placeholder,
+textarea::placeholder {
+    color: #8993a3;
 }
 
 input:focus,
 select:focus,
-textarea:focus{
-  border-color:#f5b400;
+textarea:focus {
+    border-color: #f5b400;
 }
 
-.total{
-  font-size:21px;
-  font-weight:bold;
-  margin:15px 0;
+.total {
+    margin: 18px 0;
+    padding: 14px;
+    background: #0d1219;
+    border-radius: 10px;
+    font-size: 21px;
+    font-weight: bold;
+    color: #ffffff;
 }
 
-.small{
-  color:#9da6b3;
-  font-size:14px;
+#price {
+    color: #ffffff;
+    font-size: 24px;
 }
 
-.ok{
-  color:#65e68b;
-  margin-top:12px;
-  white-space:pre-line;
+.small {
+    color: #aab3c0;
+    font-size: 14px;
 }
 
-.err{
-  color:#ff7676;
-  margin-top:12px;
-  white-space:pre-line;
+.uc-info {
+    margin-top: 10px;
+    padding: 10px;
+    background: #10151e;
+    border-radius: 8px;
+    color: #ffffff;
 }
 
-.hidden{
-  display:none;
+.ok {
+    color: #65e68b;
+    margin-top: 12px;
+    font-weight: bold;
 }
 
-.history{
-  background:#151b25;
-  border:1px solid #293342;
-  border-radius:14px;
-  padding:14px;
-  margin:10px 0;
-}
-
-.status{
-  color:#ffd447;
-  font-weight:bold;
-}
-
-.uc-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:10px;
-  margin:15px 0;
-}
-
-.uc-item{
-  background:#0d1219;
-  border:1px solid #303a4a;
-  border-radius:12px;
-  padding:14px;
-  cursor:pointer;
-  text-align:center;
-}
-
-.uc-item:hover{
-  border-color:#f5b400;
-}
-
-.uc-item.active{
-  border-color:#f5b400;
-  box-shadow:0 0 0 1px #f5b400;
-}
-
-.uc-name{
-  font-size:18px;
-  font-weight:bold;
-}
-
-.uc-price{
-  margin-top:6px;
-  color:#ffd447;
-  font-weight:bold;
-}
-
-.loading{
-  text-align:center;
-  color:#9da6b3;
-  padding:15px;
-}
-
-.author{
-  text-align:center;
-  color:#8f9aaa;
-  margin:30px 0 10px;
-  font-size:13px;
-}
-
-@media(max-width:500px){
-
-  header h1{
-    font-size:25px;
-  }
-
-  .nav button{
-    padding:10px 5px;
-    font-size:12px;
-  }
-
-  .uc-grid{
-    grid-template-columns:1fr 1fr;
-  }
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <h1>🔥 UC SERVIS</h1>
-  <p>PUBG Mobile UC xizmatlari</p>
-</header>
-
-<div class="container">
-
-<div class="nav">
-
-<button onclick="page('shop')">
-🛒 Buyurtma
-</button>
-
-<button onclick="page('history')">
-📋 Buyurtmalar
-</button>
-
-<button onclick="page('complaint')">
-📝 Murojaat
-</button>
-
-</div>
-
-
-<!-- ================= SHOP ================= -->
-
-<section id="shop">
-
-<div class="form">
-
-<h2>💎 UC buyurtma</h2>
-
-<label>UC paketi</label>
-
-<div id="ucGrid" class="uc-grid">
-
-<div class="loading">
-UC paketlari yuklanmoqda...
-</div>
-
-</div>
-
-<label>Tanlangan UC</label>
-
-<input
-id="uc"
-type="number"
-min="60"
-max="30000"
-placeholder="Masalan: 60"
-oninput="selectByNumber()"
->
-
-<div class="small">
-G2Bulk katalogidagi mavjud UC paketlari.
-</div>
-
-<div class="total">
-Jami:
-<span id="price">0</span>
-so‘m
-</div>
-
-
-<label>🆔 PUBG ID</label>
-
-<input
-id="pubg"
-placeholder="PUBG ID"
->
-
-<button
-style="width:100%;margin-bottom:10px"
-onclick="checkPubgId()"
->
-🔎 PUBG ID ni tekshirish
-</button>
-
-<div id="playerMsg"></div>
-
-
-<label>📱 Telefon</label>
-
-<input
-id="phone"
-placeholder="+998 XX XXX XX XX"
->
-
-
-<label>💳 To‘lov usuli</label>
-
-<select id="payment">
-
-<option value="Payme">Payme</option>
-<option value="Click">Click</option>
-<option value="Uzcard">Uzcard</option>
-<option value="Humo">Humo</option>
-
-</select>
-
-
-<button
-id="orderButton"
-style="width:100%;margin-top:8px"
-onclick="order()"
->
-🛒 Buyurtma berish
-</button>
-
-<div id="msg"></div>
-
-</div>
-
-</section>
-
-
-<!-- ================= HISTORY ================= -->
-
-<section id="history" class="hidden">
-
-<div class="form">
-
-<h2>📋 Buyurtmalarim</h2>
-
-<input
-id="hphone"
-placeholder="Telefon raqamingiz"
->
-
-<button onclick="historyLoad()">
-Ko‘rish
-</button>
-
-</div>
-
-<div id="list"></div>
-
-</section>
-
-
-<!-- ================= COMPLAINT ================= -->
-
-<section id="complaint" class="hidden">
-
-<div class="form">
-
-<h2>📝 Shikoyat / murojaat</h2>
-
-<input
-id="cphone"
-placeholder="Telefon"
->
-
-<textarea
-id="ctext"
-rows="6"
-placeholder="Murojaatingiz..."
-></textarea>
-
-<button
-style="width:100%"
-onclick="complaint()"
->
-Yuborish
-</button>
-
-<div id="cmsg"></div>
-
-</div>
-
-</section>
-
-
-<div class="author">
-Muallif: khayitovEldor
-</div>
-
-</div>
-
-
-<script>
-
-/* =====================================
-   API
-===================================== */
-
-const API = "";
-
-
-/* =====================================
-   UC SERVIS SOTUV NARXLARI
-===================================== */
-
-const sellPrices = {
-
-  60: 12000,
-
-  325: 65000,
-
-  660: 125000,
-
-  985: 190000,
-
-  1320: 250000,
-
-  1800: 330000,
-
-  2460: 450000,
-
-  3850: 690000,
-
-  5650: 950000,
-
-  8100: 1400000,
-
-  11950: 1950000,
-
-  16200: 2600000
-
-};
-
-
-let offers = [];
-let selectedOffer = null;
-let playerValidated = false;
-
-
-/* =====================================
-   PUL FORMAT
-===================================== */
-
-function money(number){
-
-  return Number(number || 0)
-    .toLocaleString("uz-UZ");
-
-}
-
-
-/* =====================================
-   API REQUEST
-===================================== */
-
-async function api(url, options = {}){
-
-  const response = await fetch(
-    API + url,
-    {
-      ...options,
-
-      headers:{
-        "Content-Type":"application/json",
-        ...(options.headers || {})
-      }
-    }
-  );
-
-  const data = await response.json();
-
-  if(!response.ok){
-
-    throw new Error(
-      data.error ||
-      "Server xatosi"
-    );
-
-  }
-
-  return data;
-
-}
-
-
-/* =====================================
-   UC KATALOGINI YUKLASH
-===================================== */
-
-async function loadOffers(){
-
-  const grid =
-    document.getElementById("ucGrid");
-
-  try{
-
-    const data =
-      await api("/api/pubg/offers");
-
-    offers =
-      Array.isArray(data.offers)
-        ? data.offers
-        : [];
-
-    /*
-      Agar G2Bulk katalogi hali javob bermasa,
-      UC SERVIS belgilangan narxlarini ishlatamiz.
-    */
-
-    if(offers.length === 0){
-
-      offers =
-        Object.keys(sellPrices)
-        .map(uc => ({
-          id:null,
-          name:uc + " UC",
-          price:sellPrices[uc]
-        }));
-
-    }
-
-    renderOffers();
-
-  }
-
-  catch(error){
-
-    console.error(error);
-
-    /*
-      Backend katalogi ishlamasa ham
-      mijozga UC paketlari ko‘rinadi.
-    */
-
-    offers =
-      Object.keys(sellPrices)
-      .map(uc => ({
-        id:null,
-        name:uc + " UC",
-        price:sellPrices[uc]
-      }));
-
-    renderOffers();
-
-  }
-
-}
-
-
-/* =====================================
-   UC KATALOGINI CHIQARISH
-===================================== */
-
-function renderOffers(){
-
-  const grid =
-    document.getElementById("uc
+.err {
+    color: #ff7676;
+    margin-top: 12px;
+   
