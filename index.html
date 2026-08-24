@@ -2,26 +2,22 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 
 <title>UC SERVIS</title>
 
 <style>
-*{
-    box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 html,body{
     margin:0;
     padding:0;
     background:#080b10;
     color:#fff;
-    font-family:Arial, sans-serif;
+    font-family:Arial,sans-serif;
 }
 
-body{
-    min-height:100vh;
-}
+body{min-height:100vh}
 
 header{
     background:#111722;
@@ -42,7 +38,7 @@ header p{
 
 .container{
     width:100%;
-    max-width:800px;
+    max-width:900px;
     margin:auto;
     padding:18px;
 }
@@ -69,13 +65,9 @@ button{
     cursor:pointer;
 }
 
-button:active{
-    transform:scale(.98);
-}
+button:active{transform:scale(.98)}
 
-.form,
-.card,
-.history{
+.form,.card,.history{
     background:#151b25;
     border:1px solid #293342;
     border-radius:16px;
@@ -83,9 +75,7 @@ button:active{
     margin-bottom:14px;
 }
 
-h2{
-    margin-top:0;
-}
+h2{margin-top:0}
 
 label{
     display:block;
@@ -94,9 +84,7 @@ label{
     color:#dfe5ee;
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
     width:100%;
     padding:14px;
     margin:0 0 8px;
@@ -108,15 +96,53 @@ textarea{
     outline:none;
 }
 
-input::placeholder,
-textarea::placeholder{
+input::placeholder,textarea::placeholder{
     color:#7f8997;
 }
 
-input:focus,
-select:focus,
-textarea:focus{
+input:focus,select:focus,textarea:focus{
     border-color:#f5b400;
+}
+
+.catalog{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:12px;
+}
+
+.product{
+    background:#0d1219;
+    border:1px solid #303a4a;
+    border-radius:12px;
+    padding:14px;
+    cursor:pointer;
+    transition:.15s;
+}
+
+.product:hover{border-color:#f5b400}
+
+.product.active{
+    border-color:#f5b400;
+    box-shadow:0 0 0 1px #f5b400;
+}
+
+.product-name{
+    font-weight:bold;
+    line-height:1.3;
+}
+
+.product-price{
+    color:#f5b400;
+    font-size:18px;
+    font-weight:bold;
+    margin-top:8px;
+}
+
+.small{
+    color:#9da6b3;
+    font-size:13px;
+    margin-bottom:10px;
 }
 
 .total-box{
@@ -141,10 +167,11 @@ textarea:focus{
     font-weight:bold;
 }
 
-.small{
-    color:#9da6b3;
-    font-size:13px;
-    margin-bottom:10px;
+#selectedUC,#selectedG2{
+    display:block;
+    margin-top:5px;
+    color:#f5b400;
+    font-weight:bold;
 }
 
 .ok{
@@ -177,24 +204,41 @@ textarea:focus{
     font-size:13px;
 }
 
-@media(max-width:500px){
+.section-title{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
 
-    header h1{
-        font-size:25px;
+.badge{
+    background:#202938;
+    color:#aeb6c3;
+    padding:5px 9px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+@media(max-width:600px){
+
+    header h1{font-size:25px}
+
+    .container{padding:12px}
+
+    .nav{
+        display:grid;
+        grid-template-columns:1fr 1fr;
     }
 
-    .container{
-        padding:12px;
+    .nav button:last-child{
+        grid-column:1 / -1;
     }
 
-    .nav button{
-        padding:10px 3px;
-        font-size:12px;
+    .catalog{
+        grid-template-columns:1fr;
     }
 
-    #price{
-        font-size:25px;
-    }
+    #price{font-size:25px}
 }
 </style>
 </head>
@@ -203,244 +247,337 @@ textarea:focus{
 
 <header>
     <h1>🔥 UC SERVIS</h1>
-    <p>PUBG Mobile UC xizmatlari</p>
+    <p>PUBG Mobile xizmatlari</p>
 </header>
 
 <div class="container">
 
-    <!-- NAV -->
+<div class="nav">
 
-    <div class="nav">
+    <button onclick="page('ucShop')">💎 UC</button>
 
-        <button onclick="page('shop')">
-            🛒 Buyurtma
-        </button>
+    <button onclick="page('g2bulkShop')">🛍️ G2BULK</button>
 
-        <button onclick="page('history')">
-            📋 Buyurtmalar
-        </button>
+    <button onclick="page('history')">📋 Buyurtmalar</button>
 
-        <button onclick="page('complaint')">
-            📝 Murojaat
-        </button>
+    <button onclick="page('complaint')">📝 Murojaat</button>
 
+</div>
+
+
+<!-- UC SHOP -->
+
+<section id="ucShop">
+
+<div class="form">
+
+<div class="section-title">
+    <h2>💎 UC buyurtma</h2>
+
+    <span class="badge">12 ta paket</span>
+</div>
+
+<div class="small">
+    UC paketini tanlang
+</div>
+
+<div id="ucCatalog" class="catalog"></div>
+
+<div class="total-box">
+
+    <div class="total-title">
+        Tanlangan UC
     </div>
 
+    <span id="selectedUC">
+        Tanlanmagan
+    </span>
 
-    <!-- SHOP -->
+    <span id="price">
+        0 so‘m
+    </span>
 
-    <section id="shop">
+</div>
 
-        <div class="form">
+<label>🆔 PUBG ID</label>
 
-            <h2>💎 UC buyurtma</h2>
+<input
+    id="ucPubg"
+    type="text"
+    placeholder="PUBG ID"
+>
 
-            <label>UC miqdori</label>
+<label>📱 Telefon</label>
 
-            <input
-                id="uc"
-                type="number"
-                min="60"
-                max="30000"
-                placeholder="Masalan: 720"
-                oninput="quote()"
-            >
+<input
+    id="ucPhone"
+    type="tel"
+    placeholder="+998 XX XXX XX XX"
+>
 
-            <div class="small">
-                60 – 30 000 UC
-            </div>
+<label>💳 To‘lov</label>
 
-            <div class="total-box">
+<select id="ucPayment">
 
-                <div class="total-title">
-                    Jami narx
-                </div>
+    <option value="Payme">Payme</option>
+    <option value="Uzcard">Uzcard</option>
+    <option value="Humo">Humo</option>
 
-                <span id="price">
-                    0 so‘m
-                </span>
+</select>
 
-            </div>
+<button
+    style="width:100%;margin-top:8px;"
+    onclick="orderUC()"
+>
+    🛒 UC buyurtma berish
+</button>
 
+<div id="ucMsg"></div>
 
-            <label>🆔 PUBG ID</label>
+</div>
 
-            <input
-                id="pubg"
-                type="text"
-                placeholder="PUBG ID"
-            >
-
-
-            <label>📱 Telefon</label>
-
-            <input
-                id="phone"
-                type="tel"
-                placeholder="+998 XX XXX XX XX"
-            >
+</section>
 
 
-            <label>💳 To‘lov</label>
+<!-- G2BULK SHOP -->
 
-            <select id="payment">
+<section id="g2bulkShop" class="hidden">
 
-                <option value="Payme">
-                    Payme
-                </option>
+<div class="form">
 
-                <option value="Uzcard">
-                    Uzcard
-                </option>
+<div class="section-title">
 
-                <option value="Humo">
-                    Humo
-                </option>
+    <h2>🛍️ G2BULK katalog</h2>
 
-            </select>
+    <span class="badge">
+        23 ta mahsulot
+    </span>
 
+</div>
 
-            <button
-                style="width:100%; margin-top:8px;"
-                onclick="order()"
-            >
-                🛒 Buyurtma berish
-            </button>
+<div class="small">
+    PUBG Mobile uchun G2BULK mahsulotlari
+</div>
 
-            <div id="msg"></div>
+<div id="g2bulkCatalog" class="catalog"></div>
 
-        </div>
+<div class="total-box">
 
-    </section>
-
-
-    <!-- HISTORY -->
-
-    <section
-        id="history"
-        class="hidden"
-    >
-
-        <div class="form">
-
-            <h2>📋 Buyurtmalarim</h2>
-
-            <input
-                id="hphone"
-                type="tel"
-                placeholder="Telefon raqamingiz"
-            >
-
-            <button
-                style="width:100%;"
-                onclick="historyLoad()"
-            >
-                Ko‘rish
-            </button>
-
-        </div>
-
-        <div id="list"></div>
-
-    </section>
-
-
-    <!-- COMPLAINT -->
-
-    <section
-        id="complaint"
-        class="hidden"
-    >
-
-        <div class="form">
-
-            <h2>📝 Shikoyat / murojaat</h2>
-
-            <input
-                id="cphone"
-                type="tel"
-                placeholder="Telefon"
-            >
-
-            <textarea
-                id="ctext"
-                rows="6"
-                placeholder="Murojaatingiz..."
-            ></textarea>
-
-            <button
-                style="width:100%;"
-                onclick="complaint()"
-            >
-                Yuborish
-            </button>
-
-            <div id="cmsg"></div>
-
-        </div>
-
-    </section>
-
-
-    <div class="author">
-        Muallif: khayitovEldor
+    <div class="total-title">
+        Tanlangan mahsulot
     </div>
+
+    <span id="selectedG2">
+        Tanlanmagan
+    </span>
+
+    <span id="g2price">
+        0 so‘m
+    </span>
+
+</div>
+
+<label>🆔 PUBG ID</label>
+
+<input
+    id="g2Pubg"
+    type="text"
+    placeholder="PUBG ID"
+>
+
+<button
+    style="width:100%;background:#3478f6;color:#fff;"
+    onclick="validateG2Player()"
+>
+    🔍 PUBG ID tekshirish
+</button>
+
+<div id="g2Validation"></div>
+
+<label>📱 Telefon</label>
+
+<input
+    id="g2Phone"
+    type="tel"
+    placeholder="+998 XX XXX XX XX"
+>
+
+<label>💳 To‘lov</label>
+
+<select id="g2Payment">
+
+    <option value="Payme">Payme</option>
+    <option value="Uzcard">Uzcard</option>
+    <option value="Humo">Humo</option>
+
+</select>
+
+<button
+    style="width:100%;margin-top:8px;"
+    onclick="orderG2Bulk()"
+>
+    🛒 G2BULK buyurtma berish
+</button>
+
+<div id="g2Msg"></div>
+
+</div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section id="history" class="hidden">
+
+<div class="form">
+
+<h2>📋 Buyurtmalarim</h2>
+
+<input
+    id="hphone"
+    type="tel"
+    placeholder="Telefon raqamingiz"
+>
+
+<button
+    style="width:100%;"
+    onclick="historyLoad()"
+>
+    Ko‘rish
+</button>
+
+</div>
+
+<div id="list"></div>
+
+</section>
+
+
+<!-- COMPLAINT -->
+
+<section id="complaint" class="hidden">
+
+<div class="form">
+
+<h2>📝 Shikoyat / murojaat</h2>
+
+<input
+    id="cphone"
+    type="tel"
+    placeholder="Telefon"
+>
+
+<textarea
+    id="ctext"
+    rows="6"
+    placeholder="Murojaatingiz..."
+></textarea>
+
+<button
+    style="width:100%;"
+    onclick="complaint()"
+>
+    Yuborish
+</button>
+
+<div id="cmsg"></div>
+
+</div>
+
+</section>
+
+
+<div class="author">
+    Muallif: khayitovEldor
+</div>
 
 </div>
 
 
 <script>
 
-/* ================================
-   UC NARXLARI
-================================ */
-
-const prices = [
-
-    [60,11500],
-    [120,23000],
-    [180,34500],
-    [240,46000],
-    [300,57500],
-    [360,69000],
-    [420,80500],
-    [480,92000],
-    [540,103500],
-    [600,115000],
-    [660,117000],
-    [720,126000],
-    [840,147000],
-    [960,223500],
-    [1080,251500],
-    [1200,279500],
-    [1500,346000],
-    [1800,392500],
-    [2000,439000],
-    [2500,545500],
-    [3000,651500],
-    [4000,864500],
-    [5000,1064000],
-    [6000,1263500],
-    [8000,1662500],
-    [10000,2061500],
-    [15000,3059000],
-    [20000,4056500],
-    [25000,5054000],
-    [30000,6051500]
-
-];
-
-
-/* ================================
-   API
-================================ */
+/* API */
 
 const API = "";
 
 
-/* ================================
-   PUL FORMAT
-================================ */
+/* UC CATALOG */
+
+const UC_CATALOG = [
+
+    {amount:60,name:"60 UC",price:11500},
+    {amount:325,name:"325 UC",price:63000},
+    {amount:660,name:"660 UC",price:120000},
+    {amount:985,name:"985 UC",price:186500},
+    {amount:1320,name:"1320 UC",price:240000},
+    {amount:1800,name:"1800 UC",price:295000},
+    {amount:2460,name:"2460 UC",price:406000},
+    {amount:3850,name:"3850 UC",price:547000},
+    {amount:5650,name:"5650 UC",price:856000},
+    {amount:8100,name:"8100 UC",price:1090000},
+    {amount:11950,name:"11950 UC",price:1710000},
+    {amount:16200,name:"16200 UC",price:2250000}
+
+];
+
+
+/* G2BULK CATALOG */
+
+const G2BULK_CATALOG = [
+
+    {id:"first_purchase_pack",name:"First Purchase Pack",price:12517},
+
+    {id:"prime_1_month",name:"Prime (1 Month)",price:12517},
+
+    {id:"weekly_deal_pack_1",name:"Weekly Deal Pack 1",price:12702},
+
+    {id:"60_wow_coins",name:"60 WOW Coins",price:12773},
+
+    {id:"firearm_materials",name:"Upgradable Firearm Materials Pack",price:37495},
+
+    {id:"prime_3_months",name:"Prime (3 Months)",price:37552},
+
+    {id:"weekly_deal_pack_2",name:"Weekly Deal Pack 2",price:37936},
+
+    {id:"weekly_mythic_emblem",name:"Weekly Mythic Emblem Value Pack",price:37936},
+
+    {id:"mythic_emblem_pack",name:"Mythic Emblem Pack",price:62430},
+
+    {id:"325_wow_coins",name:"325 WOW Coins",price:65290},
+
+    {id:"prime_6_months",name:"Prime (6 Months)",price:69471},
+
+    {id:"elite_pass_1_50",name:"Elite Pass LV1-50",price:69735},
+
+    {id:"prime_plus_1_month",name:"Prime Plus (1 Month)",price:115785},
+
+    {id:"660_wow_coins",name:"660 WOW Coins",price:120786},
+
+    {id:"prime_12_months",name:"Prime (12 Months)",price:138942},
+
+    {id:"elite_pass_1_100",name:"Elite Pass LV1-100",price:140679},
+
+    {id:"1800_wow_coins",name:"1800 WOW Coins",price:302095},
+
+    {id:"elite_pass_plus",name:"Elite Pass Plus LV1-100",price:344501},
+
+    {id:"prime_plus_3_months",name:"Prime Plus (3 Months)",price:347357},
+
+    {id:"3850_wow_coins",name:"3850 WOW Coins",price:604334},
+
+    {id:"prime_plus_6_months",name:"Prime Plus (6 Months)",price:684187},
+
+    {id:"8100_wow_coins",name:"8100 WOW Coins",price:1208656},
+
+    {id:"prime_plus_12_months",name:"Prime Plus (12 Months)",price:1493548}
+
+];
+
+
+let selectedUC = null;
+let selectedG2 = null;
+
 
 function money(number){
 
@@ -450,138 +587,137 @@ function money(number){
 }
 
 
-/* ================================
-   UC NARXINI HISOBLASH
-================================ */
+/* RENDER UC */
 
-function localQuote(q){
+function renderUC(){
 
-    if(
-        q < 60 ||
-        q > 30000
-    ){
+    const box =
+        document.getElementById("ucCatalog");
 
-        return null;
+    box.innerHTML = "";
 
-    }
+    UC_CATALOG.forEach(product => {
 
+        const div =
+            document.createElement("div");
 
-    for(
-        let i = 0;
-        i < prices.length - 1;
-        i++
-    ){
+        div.className = "product";
 
-        if(q === prices[i][0]){
+        div.innerHTML = `
+            <div class="product-name">
+                💎 ${product.name}
+            </div>
 
-            return prices[i][1];
+            <div class="product-price">
+                ${money(product.price)} so‘m
+            </div>
+        `;
 
-        }
+        div.onclick = function(){
 
+            document
+                .querySelectorAll("#ucCatalog .product")
+                .forEach(x =>
+                    x.classList.remove("active")
+                );
 
-        if(
-            q > prices[i][0] &&
-            q < prices[i + 1][0]
-        ){
+            div.classList.add("active");
 
-            return Math.round(
+            selectedUC = product;
 
-                prices[i][1]
-                +
-                (
-                    q - prices[i][0]
-                )
-                *
-                (
-                    prices[i + 1][1]
-                    -
-                    prices[i][1]
-                )
-                /
-                (
-                    prices[i + 1][0]
-                    -
-                    prices[i][0]
-                )
+            document.getElementById("selectedUC")
+                .textContent = product.name;
 
-            );
+            document.getElementById("price")
+                .textContent =
+                money(product.price) + " so‘m";
+        };
 
-        }
+        box.appendChild(div);
 
-    }
-
-
-    return prices[
-        prices.length - 1
-    ][1];
+    });
 
 }
 
 
-/* ================================
-   NARX
-================================ */
+/* RENDER G2BULK */
 
-function quote(){
+function renderG2Bulk(){
 
-    const q =
-        Number(
-            document.getElementById("uc").value
-        ) || 0;
+    const box =
+        document.getElementById("g2bulkCatalog");
 
+    box.innerHTML = "";
 
-    const p =
-        localQuote(q);
+    G2BULK_CATALOG.forEach(product => {
 
+        const div =
+            document.createElement("div");
 
-    document.getElementById("price")
-        .textContent =
-        p
-        ? money(p) + " so‘m"
-        : "0 so‘m";
+        div.className = "product";
+
+        div.innerHTML = `
+            <div class="product-name">
+                🛍️ ${product.name}
+            </div>
+
+            <div class="product-price">
+                ${money(product.price)} so‘m
+            </div>
+        `;
+
+        div.onclick = function(){
+
+            document
+                .querySelectorAll("#g2bulkCatalog .product")
+                .forEach(x =>
+                    x.classList.remove("active")
+                );
+
+            div.classList.add("active");
+
+            selectedG2 = product;
+
+            document.getElementById("selectedG2")
+                .textContent = product.name;
+
+            document.getElementById("g2price")
+                .textContent =
+                money(product.price) + " so‘m";
+        };
+
+        box.appendChild(div);
+
+    });
 
 }
 
 
-/* ================================
-   API REQUEST
-================================ */
+/* API REQUEST */
 
-async function api(
-    url,
-    options = {}
-){
+async function api(url,options={}){
 
     const response =
         await fetch(
             API + url,
             {
-
                 ...options,
 
                 headers:{
-
-                    "Content-Type":
-                        "application/json",
-
+                    "Content-Type":"application/json",
                     ...(options.headers || {})
-
                 }
-
             }
         );
 
-
     const text =
         await response.text();
-
 
     let data;
 
     try{
 
-        data =
-            JSON.parse(text);
+        data = JSON.parse(text);
 
     }catch{
 
@@ -590,7 +726,6 @@ async function api(
         );
 
     }
-
 
     if(!response.ok){
 
@@ -601,84 +736,227 @@ async function api(
 
     }
 
-
     return data;
+}
+
+
+/* UC ORDER */
+
+async function orderUC(){
+
+    if(!selectedUC){
+
+        show(
+            "ucMsg",
+            "Avval UC paketini tanlang.",
+            true
+        );
+
+        return;
+    }
+
+    const pubgId =
+        document.getElementById("ucPubg")
+            .value.trim();
+
+    const phone =
+        document.getElementById("ucPhone")
+            .value.trim();
+
+    const payment =
+        document.getElementById("ucPayment")
+            .value;
+
+    if(!pubgId){
+
+        show(
+            "ucMsg",
+            "PUBG ID kiriting.",
+            true
+        );
+
+        return;
+    }
+
+    if(!phone){
+
+        show(
+            "ucMsg",
+            "Telefon raqam kiriting.",
+            true
+        );
+
+        return;
+    }
+
+    try{
+
+        const data =
+            await api(
+                "/api/order",
+                {
+                    method:"POST",
+
+                    body:JSON.stringify({
+
+                        player_id:pubgId,
+                        uc:selectedUC.amount,
+                        price:selectedUC.price,
+                        phone:phone,
+                        payment:payment
+
+                    })
+                }
+            );
+
+        show(
+            "ucMsg",
+            "✅ UC buyurtma qabul qilindi. № " +
+            data.orderId
+        );
+
+    }catch(error){
+
+        show(
+            "ucMsg",
+            error.message,
+            true
+        );
+
+    }
 
 }
 
 
-/* ================================
-   BUYURTMA
-================================ */
+/* G2 PLAYER VALIDATION */
 
-async function order(){
+async function validateG2Player(){
 
-    const q =
-        Number(
-            document.getElementById("uc").value
-        ) || 0;
+    const playerId =
+        document.getElementById("g2Pubg")
+            .value.trim();
+
+    if(!playerId){
+
+        show(
+            "g2Validation",
+            "PUBG ID kiriting.",
+            true
+        );
+
+        return;
+    }
+
+    show(
+        "g2Validation",
+        "⏳ Tekshirilmoqda..."
+    );
+
+    try{
+
+        const data =
+            await api(
+                "/api/pubg/validate",
+                {
+                    method:"POST",
+
+                    body:JSON.stringify({
+                        player_id:playerId
+                    })
+                }
+            );
+
+        if(data.valid === false){
+
+            show(
+                "g2Validation",
+                "❌ PUBG ID tasdiqlanmadi.",
+                true
+            );
+
+            return;
+        }
+
+        show(
+            "g2Validation",
+            "✅ PUBG ID tasdiqlandi" +
+            (
+                data.player_name
+                ? " — " + data.player_name
+                : ""
+            )
+        );
+
+    }catch(error){
+
+        show(
+            "g2Validation",
+            error.message,
+            true
+        );
+
+    }
+
+}
+    /* =================================================
+   G2BULK ORDER
+================================================= */
+
+async function orderG2Bulk(){
+
+    if(!selectedG2){
+
+        show(
+            "g2Msg",
+            "Avval G2BULK mahsulotini tanlang.",
+            true
+        );
+
+        return;
+    }
 
 
     const pubgId =
         document
-            .getElementById("pubg")
+            .getElementById("g2Pubg")
             .value
             .trim();
 
 
     const phone =
         document
-            .getElementById("phone")
+            .getElementById("g2Phone")
             .value
             .trim();
 
 
     const payment =
         document
-            .getElementById("payment")
+            .getElementById("g2Payment")
             .value;
-
-
-    const price =
-        localQuote(q);
-
-
-    if(!price){
-
-        show(
-            "msg",
-            "UC miqdori 60–30 000 oralig‘ida bo‘lishi kerak.",
-            true
-        );
-
-        return;
-
-    }
 
 
     if(!pubgId){
 
         show(
-            "msg",
+            "g2Msg",
             "PUBG ID kiriting.",
             true
         );
 
         return;
-
     }
 
 
     if(!phone){
 
         show(
-            "msg",
+            "g2Msg",
             "Telefon raqam kiriting.",
             true
         );
 
         return;
-
     }
 
 
@@ -686,7 +964,7 @@ async function order(){
 
         const data =
             await api(
-                "/api/order",
+                "/api/g2bulk/order",
                 {
 
                     method:"POST",
@@ -695,9 +973,14 @@ async function order(){
 
                         player_id:pubgId,
 
-                        uc:q,
+                        product_id:
+                            selectedG2.id,
 
-                        price:price,
+                        product_name:
+                            selectedG2.name,
+
+                        price:
+                            selectedG2.price,
 
                         phone:phone,
 
@@ -710,8 +993,8 @@ async function order(){
 
 
         show(
-            "msg",
-            "✅ Buyurtma qabul qilindi. № " +
+            "g2Msg",
+            "✅ G2BULK buyurtma qabul qilindi. № " +
             data.orderId
         );
 
@@ -719,7 +1002,7 @@ async function order(){
     }catch(error){
 
         show(
-            "msg",
+            "g2Msg",
             error.message,
             true
         );
@@ -729,9 +1012,9 @@ async function order(){
 }
 
 
-/* ================================
-   BUYURTMALAR
-================================ */
+/* =================================================
+   BUYURTMALAR TARIXI
+================================================= */
 
 async function historyLoad(){
 
@@ -746,12 +1029,27 @@ async function historyLoad(){
 
         document
             .getElementById("list")
-            .textContent =
-            "Telefon raqamingizni kiriting.";
+            .innerHTML =
+            `
+            <div class="card err">
+                Telefon raqamingizni kiriting.
+            </div>
+            `;
 
         return;
-
     }
+
+
+    const list =
+        document.getElementById("list");
+
+
+    list.innerHTML =
+        `
+        <div class="card small">
+            ⏳ Buyurtmalar yuklanmoqda...
+        </div>
+        `;
 
 
     try{
@@ -763,10 +1061,6 @@ async function historyLoad(){
             );
 
 
-        const list =
-            document.getElementById("list");
-
-
         if(
             !data.orders ||
             data.orders.length === 0
@@ -775,12 +1069,11 @@ async function historyLoad(){
             list.innerHTML =
                 `
                 <div class="card">
-                    Buyurtma topilmadi.
+                    📭 Buyurtma topilmadi.
                 </div>
                 `;
 
             return;
-
         }
 
 
@@ -788,20 +1081,43 @@ async function historyLoad(){
             data.orders
                 .slice()
                 .reverse()
-                .map(
-                    order => `
+                .map(order => {
+
+                    const productName =
+                        order.product_name ||
+                        (
+                            order.uc
+                            ? Number(order.uc).toLocaleString("uz-UZ") +
+                              " UC"
+                            : "G2BULK"
+                        );
+
+
+                    return `
 
                     <div class="history">
 
                         <b>
-                            Buyurtma #${order.id}
+                            📦 Buyurtma #${order.id}
                         </b>
 
                         <p>
-                            💎
-                            ${Number(order.uc).toLocaleString()}
-                            UC
+                            🛍️ ${productName}
                         </p>
+
+                        ${
+                            order.uc
+                            ?
+                            `
+                            <p>
+                                💎
+                                ${Number(order.uc).toLocaleString("uz-UZ")}
+                                UC
+                            </p>
+                            `
+                            :
+                            ""
+                        }
 
                         <p>
                             💰
@@ -809,8 +1125,13 @@ async function historyLoad(){
                             so‘m
                         </p>
 
+                        <p>
+                            💳
+                            ${order.payment || "-"}
+                        </p>
+
                         <p class="status">
-                            ${order.status}
+                            📌 ${order.status || "Kutilmoqda"}
                         </p>
 
                         <p class="small">
@@ -819,26 +1140,29 @@ async function historyLoad(){
 
                     </div>
 
-                    `
-                )
+                    `;
+
+                })
                 .join("");
 
 
     }catch(error){
 
-        document
-            .getElementById("list")
-            .textContent =
-            error.message;
+        list.innerHTML =
+            `
+            <div class="card err">
+                ${error.message}
+            </div>
+            `;
 
     }
 
 }
 
 
-/* ================================
+/* =================================================
    MUROJAAT
-================================ */
+================================================= */
 
 async function complaint(){
 
@@ -856,16 +1180,27 @@ async function complaint(){
             .trim();
 
 
-    if(!phone || !text){
+    if(!phone){
 
         show(
             "cmsg",
-            "Telefon va murojaatni kiriting.",
+            "Telefon raqamingizni kiriting.",
             true
         );
 
         return;
+    }
 
+
+    if(!text){
+
+        show(
+            "cmsg",
+            "Murojaatingizni yozing.",
+            true
+        );
+
+        return;
     }
 
 
@@ -891,7 +1226,7 @@ async function complaint(){
 
         show(
             "cmsg",
-            "✅ Murojaat yuborildi."
+            "✅ Murojaat muvaffaqiyatli yuborildi."
         );
 
 
@@ -913,18 +1248,21 @@ async function complaint(){
 }
 
 
-/* ================================
+/* =================================================
    XABAR
-================================ */
+================================================= */
 
 function show(
     id,
     text,
-    error = false
+    error=false
 ){
 
     const element =
         document.getElementById(id);
+
+
+    if(!element) return;
 
 
     element.className =
@@ -939,44 +1277,66 @@ function show(
 }
 
 
-/* ================================
-   SAHIFA
-================================ */
+/* =================================================
+   SAHIFA ALMASHTIRISH
+================================================= */
 
 function page(id){
 
     const pages = [
-        "shop",
+
+        "ucShop",
+        "g2bulkShop",
         "history",
         "complaint"
+
     ];
 
 
-    pages.forEach(
-        name => {
+    pages.forEach(name => {
 
-            document
-                .getElementById(name)
-                .classList
-                .add("hidden");
+        const element =
+            document.getElementById(name);
+
+
+        if(element){
+
+            element.classList.add("hidden");
 
         }
-    );
+
+    });
 
 
-    document
-        .getElementById(id)
-        .classList
-        .remove("hidden");
+    const selected =
+        document.getElementById(id);
+
+
+    if(selected){
+
+        selected.classList.remove("hidden");
+
+    }
+
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
 
 }
 
 
-/* ================================
-   START
-================================ */
+/* =================================================
+   BOSHLANG‘ICH ISHGA TUSHIRISH
+================================================= */
 
-page("shop");
+renderUC();
+
+renderG2Bulk();
+
+page("ucShop");
+
 
 </script>
 
