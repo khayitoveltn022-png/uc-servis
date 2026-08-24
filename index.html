@@ -216,4 +216,769 @@ textarea:focus{
             🛒 Buyurtma
         </button>
 
-        <button
+        <button onclick="page('history')">
+            📋 Buyurtmalar
+        </button>
+
+        <button onclick="page('complaint')">
+            📝 Murojaat
+        </button>
+
+    </div>
+
+
+    <!-- SHOP -->
+
+    <section id="shop">
+
+        <div class="form">
+
+            <h2>💎 UC buyurtma</h2>
+
+            <label>UC miqdori</label>
+
+            <input
+                id="uc"
+                type="number"
+                min="60"
+                max="30000"
+                placeholder="Masalan: 720"
+                oninput="quote()"
+            >
+
+            <div class="small">
+                60 – 30 000 UC
+            </div>
+
+            <div class="total-box">
+
+                <div class="total-title">
+                    Jami narx
+                </div>
+
+                <span id="price">
+                    0 so‘m
+                </span>
+
+            </div>
+
+
+            <label>🆔 PUBG ID</label>
+
+            <input
+                id="pubg"
+                type="text"
+                placeholder="PUBG ID"
+            >
+
+
+            <label>📱 Telefon</label>
+
+            <input
+                id="phone"
+                type="tel"
+                placeholder="+998 XX XXX XX XX"
+            >
+
+
+            <label>💳 To‘lov</label>
+
+            <select id="payment">
+
+                <option value="Payme">
+                    Payme
+                </option>
+
+                <option value="Uzcard">
+                    Uzcard
+                </option>
+
+                <option value="Humo">
+                    Humo
+                </option>
+
+            </select>
+
+
+            <button
+                style="width:100%; margin-top:8px;"
+                onclick="order()"
+            >
+                🛒 Buyurtma berish
+            </button>
+
+            <div id="msg"></div>
+
+        </div>
+
+    </section>
+
+
+    <!-- HISTORY -->
+
+    <section
+        id="history"
+        class="hidden"
+    >
+
+        <div class="form">
+
+            <h2>📋 Buyurtmalarim</h2>
+
+            <input
+                id="hphone"
+                type="tel"
+                placeholder="Telefon raqamingiz"
+            >
+
+            <button
+                style="width:100%;"
+                onclick="historyLoad()"
+            >
+                Ko‘rish
+            </button>
+
+        </div>
+
+        <div id="list"></div>
+
+    </section>
+
+
+    <!-- COMPLAINT -->
+
+    <section
+        id="complaint"
+        class="hidden"
+    >
+
+        <div class="form">
+
+            <h2>📝 Shikoyat / murojaat</h2>
+
+            <input
+                id="cphone"
+                type="tel"
+                placeholder="Telefon"
+            >
+
+            <textarea
+                id="ctext"
+                rows="6"
+                placeholder="Murojaatingiz..."
+            ></textarea>
+
+            <button
+                style="width:100%;"
+                onclick="complaint()"
+            >
+                Yuborish
+            </button>
+
+            <div id="cmsg"></div>
+
+        </div>
+
+    </section>
+
+
+    <div class="author">
+        Muallif: khayitovEldor
+    </div>
+
+</div>
+
+
+<script>
+
+/* ================================
+   UC NARXLARI
+================================ */
+
+const prices = [
+
+    [60,11500],
+    [120,23000],
+    [180,34500],
+    [240,46000],
+    [300,57500],
+    [360,69000],
+    [420,80500],
+    [480,92000],
+    [540,103500],
+    [600,115000],
+    [660,117000],
+    [720,126000],
+    [840,147000],
+    [960,223500],
+    [1080,251500],
+    [1200,279500],
+    [1500,346000],
+    [1800,392500],
+    [2000,439000],
+    [2500,545500],
+    [3000,651500],
+    [4000,864500],
+    [5000,1064000],
+    [6000,1263500],
+    [8000,1662500],
+    [10000,2061500],
+    [15000,3059000],
+    [20000,4056500],
+    [25000,5054000],
+    [30000,6051500]
+
+];
+
+
+/* ================================
+   API
+================================ */
+
+const API = "";
+
+
+/* ================================
+   PUL FORMAT
+================================ */
+
+function money(number){
+
+    return Number(number || 0)
+        .toLocaleString("uz-UZ");
+
+}
+
+
+/* ================================
+   UC NARXINI HISOBLASH
+================================ */
+
+function localQuote(q){
+
+    if(
+        q < 60 ||
+        q > 30000
+    ){
+
+        return null;
+
+    }
+
+
+    for(
+        let i = 0;
+        i < prices.length - 1;
+        i++
+    ){
+
+        if(q === prices[i][0]){
+
+            return prices[i][1];
+
+        }
+
+
+        if(
+            q > prices[i][0] &&
+            q < prices[i + 1][0]
+        ){
+
+            return Math.round(
+
+                prices[i][1]
+                +
+                (
+                    q - prices[i][0]
+                )
+                *
+                (
+                    prices[i + 1][1]
+                    -
+                    prices[i][1]
+                )
+                /
+                (
+                    prices[i + 1][0]
+                    -
+                    prices[i][0]
+                )
+
+            );
+
+        }
+
+    }
+
+
+    return prices[
+        prices.length - 1
+    ][1];
+
+}
+
+
+/* ================================
+   NARX
+================================ */
+
+function quote(){
+
+    const q =
+        Number(
+            document.getElementById("uc").value
+        ) || 0;
+
+
+    const p =
+        localQuote(q);
+
+
+    document.getElementById("price")
+        .textContent =
+        p
+        ? money(p) + " so‘m"
+        : "0 so‘m";
+
+}
+
+
+/* ================================
+   API REQUEST
+================================ */
+
+async function api(
+    url,
+    options = {}
+){
+
+    const response =
+        await fetch(
+            API + url,
+            {
+
+                ...options,
+
+                headers:{
+
+                    "Content-Type":
+                        "application/json",
+
+                    ...(options.headers || {})
+
+                }
+
+            }
+        );
+
+
+    const text =
+        await response.text();
+
+
+    let data;
+
+    try{
+
+        data =
+            JSON.parse(text);
+
+    }catch{
+
+        throw new Error(
+            "Serverdan noto‘g‘ri javob keldi."
+        );
+
+    }
+
+
+    if(!response.ok){
+
+        throw new Error(
+            data.error ||
+            "Xatolik yuz berdi."
+        );
+
+    }
+
+
+    return data;
+
+}
+
+
+/* ================================
+   BUYURTMA
+================================ */
+
+async function order(){
+
+    const q =
+        Number(
+            document.getElementById("uc").value
+        ) || 0;
+
+
+    const pubgId =
+        document
+            .getElementById("pubg")
+            .value
+            .trim();
+
+
+    const phone =
+        document
+            .getElementById("phone")
+            .value
+            .trim();
+
+
+    const payment =
+        document
+            .getElementById("payment")
+            .value;
+
+
+    const price =
+        localQuote(q);
+
+
+    if(!price){
+
+        show(
+            "msg",
+            "UC miqdori 60–30 000 oralig‘ida bo‘lishi kerak.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(!pubgId){
+
+        show(
+            "msg",
+            "PUBG ID kiriting.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    if(!phone){
+
+        show(
+            "msg",
+            "Telefon raqam kiriting.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const data =
+            await api(
+                "/api/order",
+                {
+
+                    method:"POST",
+
+                    body:JSON.stringify({
+
+                        player_id:pubgId,
+
+                        uc:q,
+
+                        price:price,
+
+                        phone:phone,
+
+                        payment:payment
+
+                    })
+
+                }
+            );
+
+
+        show(
+            "msg",
+            "✅ Buyurtma qabul qilindi. № " +
+            data.orderId
+        );
+
+
+    }catch(error){
+
+        show(
+            "msg",
+            error.message,
+            true
+        );
+
+    }
+
+}
+
+
+/* ================================
+   BUYURTMALAR
+================================ */
+
+async function historyLoad(){
+
+    const phone =
+        document
+            .getElementById("hphone")
+            .value
+            .trim();
+
+
+    if(!phone){
+
+        document
+            .getElementById("list")
+            .textContent =
+            "Telefon raqamingizni kiriting.";
+
+        return;
+
+    }
+
+
+    try{
+
+        const data =
+            await api(
+                "/api/orders?phone=" +
+                encodeURIComponent(phone)
+            );
+
+
+        const list =
+            document.getElementById("list");
+
+
+        if(
+            !data.orders ||
+            data.orders.length === 0
+        ){
+
+            list.innerHTML =
+                `
+                <div class="card">
+                    Buyurtma topilmadi.
+                </div>
+                `;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            data.orders
+                .slice()
+                .reverse()
+                .map(
+                    order => `
+
+                    <div class="history">
+
+                        <b>
+                            Buyurtma #${order.id}
+                        </b>
+
+                        <p>
+                            💎
+                            ${Number(order.uc).toLocaleString()}
+                            UC
+                        </p>
+
+                        <p>
+                            💰
+                            ${money(order.price)}
+                            so‘m
+                        </p>
+
+                        <p class="status">
+                            ${order.status}
+                        </p>
+
+                        <p class="small">
+                            ${order.createdAt || ""}
+                        </p>
+
+                    </div>
+
+                    `
+                )
+                .join("");
+
+
+    }catch(error){
+
+        document
+            .getElementById("list")
+            .textContent =
+            error.message;
+
+    }
+
+}
+
+
+/* ================================
+   MUROJAAT
+================================ */
+
+async function complaint(){
+
+    const phone =
+        document
+            .getElementById("cphone")
+            .value
+            .trim();
+
+
+    const text =
+        document
+            .getElementById("ctext")
+            .value
+            .trim();
+
+
+    if(!phone || !text){
+
+        show(
+            "cmsg",
+            "Telefon va murojaatni kiriting.",
+            true
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        await api(
+            "/api/complaints",
+            {
+
+                method:"POST",
+
+                body:JSON.stringify({
+
+                    phone:phone,
+
+                    text:text
+
+                })
+
+            }
+        );
+
+
+        show(
+            "cmsg",
+            "✅ Murojaat yuborildi."
+        );
+
+
+        document
+            .getElementById("ctext")
+            .value = "";
+
+
+    }catch(error){
+
+        show(
+            "cmsg",
+            error.message,
+            true
+        );
+
+    }
+
+}
+
+
+/* ================================
+   XABAR
+================================ */
+
+function show(
+    id,
+    text,
+    error = false
+){
+
+    const element =
+        document.getElementById(id);
+
+
+    element.className =
+        error
+        ? "err"
+        : "ok";
+
+
+    element.textContent =
+        text;
+
+}
+
+
+/* ================================
+   SAHIFA
+================================ */
+
+function page(id){
+
+    const pages = [
+        "shop",
+        "history",
+        "complaint"
+    ];
+
+
+    pages.forEach(
+        name => {
+
+            document
+                .getElementById(name)
+                .classList
+                .add("hidden");
+
+        }
+    );
+
+
+    document
+        .getElementById(id)
+        .classList
+        .remove("hidden");
+
+}
+
+
+/* ================================
+   START
+================================ */
+
+page("shop");
+
+</script>
+
+</body>
+</html>
